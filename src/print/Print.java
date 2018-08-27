@@ -88,7 +88,6 @@ public class Print extends JFrame{
 					errores.setVisible(true);
 					errores.setForeground(new Color(50,205,50));
 					errores.setText("Limpiado exitoso!!! ");
-					//try{Thread.sleep(3000);System.out.println("erroes true");errores.setVisible(false);}catch(Exception e){}
 				
 				}
 				jta.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
