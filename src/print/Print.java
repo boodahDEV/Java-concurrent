@@ -4,6 +4,9 @@ import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.MouseMotionAdapter;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.ActionListener;
@@ -26,6 +29,18 @@ public class Print extends JFrame{
 					Print frame = new Print();
 					frame.setVisible(true);
 					frame.setLocationRelativeTo(null);
+					try{
+						  frame.setDefaultLookAndFeelDecorated(true);
+						  JDialog.setDefaultLookAndFeelDecorated(true);
+						  UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+						  //UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+						  //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+						  //UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
+						}
+						catch (Exception e)
+						 {
+						  e.printStackTrace();
+						 }
 	}
 
 	/**
@@ -59,6 +74,7 @@ public class Print extends JFrame{
 			public void actionPerformed(ActionEvent a) {
 				ejecutar.setEnabled(false);
 				clear.setEnabled(false);
+				jtfentrada.setEditable(false);
 				try {
 					int time = Integer.parseInt(jtfentrada.getText());
 					Thread hilo = new Thread(new Procesos(jta,errores,ejecutar,clear,time));
@@ -86,6 +102,7 @@ public class Print extends JFrame{
 					jtfentrada.setText("");
 					ejecutar.setEnabled(true);
 					errores.setVisible(true);
+					jtfentrada.setEditable(true);
 					errores.setForeground(new Color(50,205,50));
 					errores.setText("Limpiado exitoso!!! ");
 				
@@ -107,6 +124,16 @@ public class Print extends JFrame{
 		contentPane.add(errores);
 		
 		git = new JButton("");
+		git.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent a) {
+				try {
+					Desktop.getDesktop().browse(new URI("https://github.com/boodahDEV/Java-concurrent"));
+					} catch (Exception e) {
+						errores.setVisible(true);
+						errores.setText("Error, sin conexion!");
+					} 
+			}
+		});
 		git.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		git.setRolloverSelectedIcon(new ImageIcon(Print.class.getResource("/print/github2.png")));
 		git.setRolloverIcon(new ImageIcon(Print.class.getResource("/print/github2.png")));
