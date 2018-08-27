@@ -3,15 +3,22 @@ package print;
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-public class Print extends JFrame {
+public class Print extends JFrame{
 
-	private JPanel contentPane;
-	private JTextField jtfentrada;
-	private JButton ejecutar;
-	private JPanel panel;
-	private JButton exit;
-
+	protected JPanel contentPane,panel;
+	protected JTextArea jta;
+	protected JTextField jtfentrada;
+	protected JButton ejecutar;
+	protected JButton exit,git,clear;
+	protected JLabel errores;
+	protected int x,y;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -33,11 +40,12 @@ public class Print extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JTextArea jta = new JTextArea();
+		jta = new JTextArea();
+		JScrollPane jsp = new JScrollPane(jta);
 		jta.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		jta.setText("ok");
+			jta.setText("ok"); // eliminar
 		jta.setBounds(10, 110, 254, 258);
-		contentPane.add(jta);
+		contentPane.add(jsp);
 		
 		jtfentrada = new JTextField();
 		jtfentrada.setFont(new Font("Roboto Condensed Light", Font.PLAIN, 15));
@@ -46,29 +54,92 @@ public class Print extends JFrame {
 		jtfentrada.setColumns(10);
 		
 		ejecutar = new JButton("Ejecutar");
+		ejecutar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent a) {
+				Thread hilo = new Thread(new Procesos(jta,panel));
+			}
+		});
 		ejecutar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		ejecutar.setFocusable(false);
 		ejecutar.setBounds(175, 50, 85, 25);
 		contentPane.add(ejecutar);
 		
-		JButton clear = new JButton("Limpiar");
+		clear = new JButton("Limpiar");
+		clear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(jta.getText().isEmpty()==false){
+					jta.setText("");
+					errores.setVisible(true);
+					errores.setForeground(new Color(50,205,50));
+					errores.setText("Limpiado exitoso!!! ");
+					//try{Thread.sleep(3000);System.out.println("erroes true");errores.setVisible(false);}catch(Exception e){}
+					System.out.println("erroes false");
+				}else {
+					errores.setVisible(true);
+					errores.setForeground(new Color(255,0,0));
+					errores.setText("El JTextArea esta limpio.");
+					//try{Thread.sleep(3000);System.out.println("erroes true");errores.setVisible(false);}catch(Exception e){}
+					System.out.println("erroes false");
+				}
+				
+			}
+		});
 		clear.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		clear.setFocusable(false);
 		clear.setBounds(175, 80, 85, 25);
 		contentPane.add(clear);
 		
-		JLabel errores = new JLabel("Error");
+		errores = new JLabel("Error");
+		errores.setVisible(false);
+		errores.setForeground(new Color(255, 0, 0));
+		errores.setFont(new Font("Roboto Condensed", Font.BOLD | Font.ITALIC, 15));
 		errores.setBounds(10, 91, 160, 14);
 		contentPane.add(errores);
 		
+		git = new JButton("");
+		git.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		git.setRolloverSelectedIcon(new ImageIcon(Print.class.getResource("/print/github2.png")));
+		git.setRolloverIcon(new ImageIcon(Print.class.getResource("/print/github2.png")));
+		git.setIcon(new ImageIcon(Print.class.getResource("/print/github.png")));
+		git.setIconTextGap(-11);
+		git.setFocusable(false);
+		git.setContentAreaFilled(false);
+		git.setBorderPainted(false);
+		git.setBounds(1, 34, 30, 30);
+		contentPane.add(git);
+		
 		panel = new JPanel();
+		panel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent a) {
+				x = a.getX();
+				y = a.getY();
+			}
+		});
+		panel.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent a) {
+				int xx = a.getXOnScreen();
+				int yy = a.getYOnScreen();
+				
+				setLocation(xx-x,yy-y);
+			}
+		});
+		panel.setBackground(new Color(255, 255, 255));
 		panel.setBounds(1, 1, 273, 33);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
-		exit = new JButton(" ");
-		exit.setIcon(new ImageIcon(this.getClass().getResource("exit.png")));
-		exit.setIconTextGap(-100);
+		exit = new JButton("");
+		exit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent a) {
+				System.exit(0);
+			}
+		});
+		exit.setRolloverSelectedIcon(new ImageIcon(Print.class.getResource("/print/exit2.png")));
+		exit.setRolloverIcon(new ImageIcon(Print.class.getResource("/print/exit2.png")));
+		exit.setIcon(new ImageIcon(Print.class.getResource("/print/exit.png")));
+		exit.setIconTextGap(-11);
 		exit.setFocusable(false);
 		exit.setContentAreaFilled(false);
 		exit.setBorderPainted(false);
