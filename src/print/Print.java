@@ -25,6 +25,7 @@ public class Print extends JFrame{
 	public static void main(String[] args) {
 					Print frame = new Print();
 					frame.setVisible(true);
+					frame.setLocationRelativeTo(null);
 	}
 
 	/**
@@ -43,8 +44,8 @@ public class Print extends JFrame{
 		jta = new JTextArea();
 		JScrollPane jsp = new JScrollPane(jta);
 		jta.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-			jta.setText("ok"); // eliminar
-		jta.setBounds(10, 110, 254, 258);
+			jta.setEditable(false);
+			jsp.setBounds(10, 110, 254, 258);
 		contentPane.add(jsp);
 		
 		jtfentrada = new JTextField();
@@ -56,7 +57,20 @@ public class Print extends JFrame{
 		ejecutar = new JButton("Ejecutar");
 		ejecutar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
-				Thread hilo = new Thread(new Procesos(jta,panel));
+				ejecutar.setEnabled(false);
+				clear.setEnabled(false);
+				try {
+					int time = Integer.parseInt(jtfentrada.getText());
+					Thread hilo = new Thread(new Procesos(jta,errores,ejecutar,clear,time));
+					 hilo.start(); //Se inicia el hilo
+					 errores.setForeground(new Color(255,0,0));
+				}catch(Exception e) {
+					errores.setVisible(true);
+					jta.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(255, 0, 0)));
+					errores.setText("Parametro incorrecto!");
+					ejecutar.setEnabled(true);
+					clear.setEnabled(true);
+				}
 			}
 		});
 		ejecutar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -67,21 +81,18 @@ public class Print extends JFrame{
 		clear = new JButton("Limpiar");
 		clear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(jta.getText().isEmpty()==false){
+				if(jta.getText().isEmpty()==false || jtfentrada.getText().isEmpty()==false){
 					jta.setText("");
+					jtfentrada.setText("");
+					ejecutar.setEnabled(true);
 					errores.setVisible(true);
 					errores.setForeground(new Color(50,205,50));
 					errores.setText("Limpiado exitoso!!! ");
 					//try{Thread.sleep(3000);System.out.println("erroes true");errores.setVisible(false);}catch(Exception e){}
-					System.out.println("erroes false");
-				}else {
-					errores.setVisible(true);
-					errores.setForeground(new Color(255,0,0));
-					errores.setText("El JTextArea esta limpio.");
-					//try{Thread.sleep(3000);System.out.println("erroes true");errores.setVisible(false);}catch(Exception e){}
-					System.out.println("erroes false");
-				}
 				
+				}
+				jta.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+				errores.setVisible(false);
 			}
 		});
 		clear.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -89,7 +100,7 @@ public class Print extends JFrame{
 		clear.setBounds(175, 80, 85, 25);
 		contentPane.add(clear);
 		
-		errores = new JLabel("Error");
+		errores = new JLabel("");
 		errores.setVisible(false);
 		errores.setForeground(new Color(255, 0, 0));
 		errores.setFont(new Font("Roboto Condensed", Font.BOLD | Font.ITALIC, 15));
