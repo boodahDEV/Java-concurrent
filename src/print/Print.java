@@ -22,25 +22,21 @@ public class Print extends JFrame{
 	protected JLabel errores;
 	protected int x,y;
 	
-	/**
+	/** 
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 					Print frame = new Print();
 					frame.setVisible(true);
 					frame.setLocationRelativeTo(null);
-					try{
-						  frame.setDefaultLookAndFeelDecorated(true);
-						  JDialog.setDefaultLookAndFeelDecorated(true);
-						  UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-						  //UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-						  //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-						  //UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
+				/*	try{
+						  frame.setDefaultLookAndFeelDecorated(true);"com.sun.java.swing.plaf.motif.MotifLookAndFeel");
 						}
 						catch (Exception e)
 						 {
 						  e.printStackTrace();
 						 }
+						 */
 	}
 
 	/**
@@ -76,7 +72,7 @@ public class Print extends JFrame{
 				clear.setEnabled(false);
 				jtfentrada.setEditable(false);
 				try {
-					int time = Integer.parseInt(jtfentrada.getText());
+					int time = Integer.parseInt(jtfentrada.getText().trim());
 					Thread hilo = new Thread(new Procesos(jta,errores,ejecutar,clear,time));
 					 hilo.start(); //Se inicia el hilo
 					 errores.setForeground(new Color(255,0,0));
