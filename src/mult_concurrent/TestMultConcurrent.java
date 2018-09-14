@@ -1,4 +1,4 @@
-//package mult_concurrent;
+package mult_concurrent;
 
 public class TestMultConcurrent {
 
