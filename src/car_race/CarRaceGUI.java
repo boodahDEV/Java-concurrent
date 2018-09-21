@@ -9,16 +9,17 @@ import java.awt.*;
 
 public class CarRaceGUI extends JFrame {
 
-	private JPanel contentPane,pista,meta,display;
-	private JButton exit;
-	public int x,y;
-	private JLabel[] label = new JLabel[10];
-	private JTextField addcar,distrace;
-	private JLabel aviso;
-	private JSeparator separator1,separator,separator_1,separator_2;
-	private Random random = new Random();
-	private String[] nameCar = new String[10];
-	
+	protected JPanel contentPane,pista,meta,display;
+	protected JButton exit;
+	protected int x,y;
+	protected JLabel[] label = new JLabel[10];
+	protected JTextField addcar,distrace;
+	protected JLabel aviso;
+	protected JSeparator separator1,separator,separator_1,separator_2;
+	protected Random random = new Random();
+	protected String[] nameCar = new String[10];
+	protected Thread car[] =new Car_GUI[10];
+	protected CarRaceGUI gui;
 	/**
 	 * Launch the application.
 	 */
@@ -171,6 +172,16 @@ public class CarRaceGUI extends JFrame {
 		contentPane.add(separator1);
 		
 		MaterialButton stop = new MaterialButton();
+		stop.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Car_GUI.DETENER=true;
+				label();
+				pista.repaint();
+			}
+			
+		});
 		stop.setText("Stop");
 		stop.setFocusable(false);
 		stop.setBounds(521, 325, 52, 35);
@@ -178,25 +189,25 @@ public class CarRaceGUI extends JFrame {
 		stop.setColorHover(new Color(76,175,80));
 		stop.setColorPressed(new Color(118,210,117));
 		contentPane.add(stop);
-		
+	
 		MaterialButton star = new MaterialButton();
 		star.addActionListener(new ActionListener() {
 			int yy;
 			public void actionPerformed(ActionEvent a){
+			if(newcar.isEnabled()==false && vueltas.isEnabled()==false) {
 			try {
-			  
+			  label();
+			  pista.repaint();
 				  for(int i=0;i<Integer.parseInt(addcar.getText().trim());i++) {
-					  yy=i*(20-5);
-					label[i] = new JLabel(" ");
-					label[i].setIconTextGap(-1);
-					label[i].setIcon(new ImageIcon(CarRaceGUI.class.getResource("/car_race/car_2.gif")));
-					System.out.println(yy);
-					label[i].setBounds(0, yy, 45, 20);
-					label[i].setVisible(true);
-					pista.add(label[i]);
-				  new Car_GUI(nameCar[random.nextInt(10)], label[i],Integer.parseInt(distrace.getText().trim()),yy).start();System.out.println("se crea el hilo");
-			  }
+				  car[i] = new Car_GUI(nameCar[random.nextInt(10)], label[i],Integer.parseInt(distrace.getText().trim()),yy);System.out.println("se crea el hilo");
+				  Car_GUI.DETENER=false;
+				  car[i].start();
+				 }
+				 new DeterminaGanador(gui).imprimir();; 
 			}catch(Exception e) {}
+				}else {
+					System.out.println("ERROR");
+				}
 			}//action performet
 		});
 		star.setText("Run");
@@ -211,5 +222,90 @@ public class CarRaceGUI extends JFrame {
 		separator_1.setOrientation(SwingConstants.VERTICAL);
 		separator_1.setBounds(388, 85, 2, 269);
 		contentPane.add(separator_1);
+		
 	}//end builder
+	
+	
+	public void label() {
+		//System.out.println("LAbel pegados.");
+			label[0] = new JLabel(" ");
+			label[0].setIconTextGap(-1);
+			label[0].setIcon(new ImageIcon(CarRaceGUI.class.getResource("/car_race/car_2.gif")));
+			label[0].setBounds(10, 10, 45, 20);
+			label[0].setVisible(true);
+			pista.add(label[0]);
+			
+			label[1] = new JLabel(" ");
+			label[1].setIcon(new ImageIcon(CarRaceGUI.class.getResource("/car_race/car_2.gif")));
+			label[1].setIconTextGap(-1);
+			label[1].setBounds(10, 36, 45, 20);
+			label[1].setVisible(true);
+			pista.add(label[1]);
+			
+			label[2] = new JLabel(" ");
+			label[2].setIcon(new ImageIcon(CarRaceGUI.class.getResource("/car_race/car_2.gif")));
+			label[2].setIconTextGap(-1);
+			label[2].setBounds(10, 86, 45, 20);
+			label[2].setVisible(true);
+			pista.add(label[2]);
+			
+			label[3] = new JLabel(" ");
+			label[3].setIcon(new ImageIcon(CarRaceGUI.class.getResource("/car_race/car_2.gif")));
+			label[3].setIconTextGap(-1);
+			label[3].setBounds(10, 61, 45, 20);
+			label[0].setVisible(true);
+			pista.add(label[3]);
+			
+			label[5] = new JLabel(" ");
+			label[5].setIcon(new ImageIcon(CarRaceGUI.class.getResource("/car_race/car_2.gif")));
+			label[5].setIconTextGap(-1);
+			label[5].setBounds(10, 136, 45, 20);
+			label[5].setVisible(true);
+			pista.add(label[5]);
+			
+			label[4] = new JLabel(" ");
+			label[4].setIcon(new ImageIcon(CarRaceGUI.class.getResource("/car_race/car_2.gif")));
+			label[4].setIconTextGap(-1);
+			label[4].setBounds(10, 111, 45, 20);
+			label[4].setVisible(true);
+			pista.add(label[4]);
+			
+			label[6] = new JLabel(" ");
+			label[6].setIcon(new ImageIcon(CarRaceGUI.class.getResource("/car_race/car_2.gif")));
+			label[6].setIconTextGap(-1);
+			label[6].setBounds(10, 186, 45, 20);
+			label[6].setVisible(true);
+			pista.add(label[6]);
+			
+			label[7] = new JLabel(" ");
+			label[7].setIcon(new ImageIcon(CarRaceGUI.class.getResource("/car_race/car_2.gif")));
+			label[7].setIconTextGap(-1);
+			label[7].setBounds(10, 161, 45, 20);
+			label[7].setVisible(true);
+			pista.add(label[7]);
+			
+			label[8] = new JLabel(" ");
+			label[8].setIcon(new ImageIcon(CarRaceGUI.class.getResource("/car_race/car_2.gif")));
+			label[8].setIconTextGap(-1);
+			label[8].setBounds(10, 213, 45, 20);
+			label[8].setVisible(true);
+			pista.add(label[8]);
+			
+//			label[9] = new JLabel(" ");
+//			label[9].setIcon(new ImageIcon(CarRaceGUI.class.getResource("/car_race/car_2.gif")));
+//			label[9].setIconTextGap(-1);
+//			label[9].setBounds(10, 188, 45, 20);
+//			label[9].setVisible(true);
+//			pista.add(label[9]);
+			
+			label[9] = new JLabel(" ");
+			label[9].setIcon(new ImageIcon(CarRaceGUI.class.getResource("/car_race/car_2.gif")));
+			label[9].setIconTextGap(-1);
+			label[9].setBounds(10, 238, 45, 20);
+			label[9].setVisible(true);
+			pista.add(label[0]);
+		
+	}
+
+
 }//end class
