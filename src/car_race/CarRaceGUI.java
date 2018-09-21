@@ -44,6 +44,7 @@ public class CarRaceGUI extends JFrame {
 		contentPane.setLayout(null);
 		
 		pista = new JPanel();
+		pista.setBackground(Color.WHITE);
 		//pista.setBackground(Color.WHITE);
 		pista.setBounds(10, 85, 377, 269);
 		contentPane.add(pista);
@@ -128,6 +129,7 @@ public class CarRaceGUI extends JFrame {
 		vueltas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
 				vueltas.setEnabled(false);distrace.setEnabled(false);
+				
 			}
 		});
 		vueltas.setText("Distance Race");
@@ -176,9 +178,12 @@ public class CarRaceGUI extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Car_GUI.DETENER=true;
+				pista.removeAll();
 				label();
 				pista.repaint();
+				for(int i=0;i<car.length;i++)
+					car[i].stop(); // No se debe hacer, pero por cuestion es asi, deternerlo en caliente
+				//System.gc();
 			}
 			
 		});
@@ -200,7 +205,6 @@ public class CarRaceGUI extends JFrame {
 			  pista.repaint();
 				  for(int i=0;i<Integer.parseInt(addcar.getText().trim());i++) {
 				  car[i] = new Car_GUI(nameCar[random.nextInt(10)], label[i],Integer.parseInt(distrace.getText().trim()),yy);System.out.println("se crea el hilo");
-				  Car_GUI.DETENER=false;
 				  car[i].start();
 				 }
 				 new DeterminaGanador(gui).imprimir();; 
