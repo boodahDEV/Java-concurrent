@@ -227,8 +227,9 @@ public class CarRaceGUI extends JFrame {
 			  pista.repaint();
 				  for(int i=0;i<Integer.parseInt(addcar.getText().trim());i++) {
 				  car[i] = new Car_GUI(nameCar[i/*random.nextInt(10)*/], label[i],Integer.parseInt(distrace.getText().trim()),yy, ganador[i],pista.getWidth(),jta,i);System.out.println("se crea el hilo");
-				  car[i].start();
 				 }
+				  for(int i = 0;i<car.length;i++)
+					  car[i].start();
 				  
 			}catch(Exception e) {}
 				}else {

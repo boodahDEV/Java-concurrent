@@ -21,7 +21,7 @@ public class Car_GUI extends Thread {
 	}
 	
 	public void run() {
-		int time = (int) (Math.random() * 5000);
+		int time = (int) (Math.random() * 500);
 	
 		for(int i=1;i<=finish;i++) {
 			
