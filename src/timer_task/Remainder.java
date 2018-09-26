@@ -1,17 +1,18 @@
 package timer_task;
 
-import java.util.TimerTask;
+import java.util.*;
 
-public class Remainder extends TimerTask {
-String mensaje;
-public Remainder(String mensaje) {
-	this.mensaje=mensaje;
-}
-	
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		System.out.println(mensaje);
+public class Remainder extends TimerTask
+{
+	String message;
+
+	public Remainder(String message)
+	{
+		this.message = message;
 	}
 
+	public void run()
+	{
+		System.out.println(message);
+	}
 }

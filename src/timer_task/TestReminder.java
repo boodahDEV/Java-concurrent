@@ -1,18 +1,18 @@
 package timer_task;
 
-import java.util.Timer;
+import java.util.*;
 
-public class TestReminder {
+public class TestReminder
+{
+	public static void main(String [] args)
+	{
+		Timer timer = new Timer();
+		Remainder meeting = new Remainder("Meeting with Ann");
+		Remainder dentist = new Remainder("Dr. Moler, cavity filled");
+		Remainder date = new Remainder("Dinner with Matt and Ann");
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		Timer t1 = new Timer();
-		Remainder a1 = new Remainder("Hola");
-		Remainder a2 = new Remainder("mundo");
-		Remainder a3 = new Remainder(":v");
-		t1.schedule(a1, 5000, 2000);
-		t1.schedule(a2, 10000, 2000);
-		t1.schedule(a3, 15000, 2000);
+		timer.schedule(meeting, 0);
+		timer.schedule(dentist, 30000);
+		timer.schedule(date, 120000);
 	}
-
 }
