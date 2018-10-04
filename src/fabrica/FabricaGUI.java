@@ -10,19 +10,18 @@ import javax.swing.border.MatteBorder;
 
 
 
-public class FabricaGUI extends JFrame implements Runnable{
+public class FabricaGUI extends JFrame {
 
 	private JPanel contentPane;
-	private JLabel jlcaja,aviso;
-	private MaterialButton cantcaja,materialButton_1,setProduc,setSuper;
+	private MaterialButton cantcaja,materialButton_1,setProduc,setSuper,star;
 	private JCheckBox setsuper;
 	private JTextField cantCajas,cantPro,jtfsuper;
 	private int s=1,p=1,c,cantPapel;
-	private JLabel setpaper;
-	private JLabel paper;
+	private JLabel setpaper,paper,aviso2,jlcaja,aviso;
 	private JSlider deslisar;
-	private JLabel aviso2;
-	
+		protected People [] people;
+		protected Supervisor [] supervisor;
+		protected ThreadGroup group;
 	public static void main(String[] args) {
 					FabricaGUI frame = new FabricaGUI();
 					frame.setLocationRelativeTo(null);
@@ -82,8 +81,11 @@ public class FabricaGUI extends JFrame implements Runnable{
 				}else {
 					aviso.setVisible(true);
 					aviso.setText("Entry error, try again.");
-				}
-				}catch(Exception e) {aviso.setVisible(true);
+					}
+				}catch(Exception e) {
+				cantcaja.setEnabled(true);
+				cantCajas.setEnabled(true);
+				aviso.setVisible(true);
 				aviso.setText("Entry error, try again.");}
 			}
 		});
@@ -138,6 +140,7 @@ public class FabricaGUI extends JFrame implements Runnable{
 			public void stateChanged(ChangeEvent arg0) {
 				//System.out.println(deslisar.getValue());
 				paper.setText(""+deslisar.getValue());
+				cantPapel = deslisar.getValue();
 			}
 		});
 		deslisar.setValue(1);
@@ -212,7 +215,7 @@ public class FabricaGUI extends JFrame implements Runnable{
 		
 		setpaper = new JLabel("Set amount of paper per box");
 		setpaper.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		setpaper.setBounds(175, 22, 139, 14);
+		setpaper.setBounds(175, 20, 139, 14);
 		contentPane.add(setpaper);
 		
 		aviso2 = new JLabel();
@@ -222,11 +225,40 @@ public class FabricaGUI extends JFrame implements Runnable{
 		aviso2.setBounds(325, 112, 105, 14);
 		contentPane.add(aviso2);
 		
+		star = new MaterialButton();
+		star.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent a) {
+			if (cantPro.isEnabled() == false && cantCajas.isEnabled() == false && jtfsuper.isEnabled() == false) {
+				deslisar.setEnabled(false);
+				star.setEnabled(false);
+				
+				//*********************************//
+				Box  caja = new Box(c,cantPapel);
+				people = new People[p];
+				supervisor = new Supervisor[s];
+				Thread []persona = new Thread[people.length];
+				for(int i=0;i<people.length ;i++) {
+					people[i] = new People(caja, i+1);
+					persona[i] = new Thread(people[i]);
+				}
+				for(int i=0;i<p;i++) {
+					//Box  caja = new Box(c,cantPapel);
+					persona[i].start();
+				}
+				supervisor[0] = new Supervisor(caja,1);
+				supervisor[0].setDaemon(true);
+				supervisor[0].start();
+				}
+			}
+		});
+		star.setColorNormal(new Color(0,41,132));
+		star.setColorHover(new Color(63,81,181));
+		star.setColorPressed(new Color(117,125,232));
+		star.setFocusable(false);
+		star.setText("Start to Manufacture");
+		star.setBounds(300, 382, 150, 35);
+		contentPane.add(star);
+		
 	}//end builder
 
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		
-	}
 }
