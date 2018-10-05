@@ -1,14 +1,27 @@
 package fabrica;
 
 import javax.swing.*;
+import java.awt.Cursor;
 
-public class People extends JPanel implements Runnable {
+public class People extends JFrame implements Runnable {
 	private Box caja;
 	private int id;
-
+	private JLabel papel;
     public People(Box caja, int id){
  		this.caja = caja;
  		this.id = id;
+ 		getContentPane().setLayout(null);
+ 		
+ 		papel = new JLabel("image");
+ 		papel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+ 		papel.setBounds(51, 24, 90, 73);
+ 		papel.setIconTextGap(-4);
+ 		papel.setIcon(new ImageIcon(People.class.getResource("/fabrica/papel.gif")));
+ 		getContentPane().add(papel);
+ 		
+ 		JTextArea jta = new JTextArea();
+ 		jta.setBounds(10, 126, 173, 113);
+ 		getContentPane().add(jta);
     }
 
     public void run(){

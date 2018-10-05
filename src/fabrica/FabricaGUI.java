@@ -107,7 +107,10 @@ public class FabricaGUI extends JFrame {
 					aviso.setVisible(true);
 					aviso.setText("Entry error, try again.");
 					}
-				}catch(Exception e) {aviso.setVisible(true);
+				}catch(Exception e) {
+					cantPro.setEnabled(true);
+					setProduc.setEnabled(true);
+				aviso.setVisible(true);
 				aviso.setText("Entry error, try again.");}
 			}
 			
@@ -242,9 +245,9 @@ public class FabricaGUI extends JFrame {
 					persona[i] = new Thread(people[i]);
 				}
 				for(int i=0;i<p;i++) {
-					//Box  caja = new Box(c,cantPapel);
 					persona[i].start();
 				}
+				
 				supervisor[0] = new Supervisor(caja,1);
 				supervisor[0].setDaemon(true);
 				supervisor[0].start();
