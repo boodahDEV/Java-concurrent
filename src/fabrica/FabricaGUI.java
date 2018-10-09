@@ -232,6 +232,8 @@ public class FabricaGUI extends JFrame {
 		star.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
 			if (cantPro.isEnabled() == false && cantCajas.isEnabled() == false && jtfsuper.isEnabled() == false) {
+				setTitle("FabricaV1.0");
+				contentPane.setBorder(null);
 				deslisar.setEnabled(false);
 				star.setEnabled(false);
 				
@@ -251,6 +253,9 @@ public class FabricaGUI extends JFrame {
 				supervisor[0] = new Supervisor(caja,1);
 				supervisor[0].setDaemon(true);
 				supervisor[0].start();
+				}else {
+					contentPane.setBorder(new MatteBorder(2,2,2,2, new Color(220, 20, 60)));
+					setTitle("Error, campos vacios!");
 				}
 			}
 		});
@@ -261,6 +266,8 @@ public class FabricaGUI extends JFrame {
 		star.setText("Start to Manufacture");
 		star.setBounds(300, 382, 150, 35);
 		contentPane.add(star);
+		
+		
 		
 	}//end builder
 
