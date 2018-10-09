@@ -9,6 +9,7 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -41,10 +42,11 @@ public class ChatGUIConsumidor extends JFrame {
 		contentPane.setLayout(null);
 		
 		JTextArea jta = new JTextArea();
-		jta.setBounds(1, 1, 299, 380);
+		JScrollPane jsp = new JScrollPane(jta);
+		jsp.setBounds(1, 30, 283, 350);
 		jta.setEditable(false);
-		jta.setVisible(true);
-		contentPane.add(jta);
+		jsp.setVisible(true);
+		contentPane.add(jsp);
 		
 		JTextField jtfentrada = new JTextField();
 		//jtfentrada.setHorizontalAlignment(SwingConstants.SOUTH);
@@ -61,7 +63,7 @@ public class ChatGUIConsumidor extends JFrame {
 		aceptar.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
 				if(jtfentrada.getText().isEmpty() == false) {
-					jta.append(jtfentrada.getText() + "\n");
+					jta.append(" #"+jtfentrada.getText() + "\n");
 					jtfentrada.setText("");
 				}else {
 					jta.append("Error, JTextField esta vaio!!.\n");
@@ -75,7 +77,7 @@ public class ChatGUIConsumidor extends JFrame {
 			public void keyPressed(KeyEvent a) {
 				if (a.getKeyCode() == KeyEvent.VK_ENTER) {
 					if(jtfentrada.getText().isEmpty() == false) {
-						jta.append(jtfentrada.getText() + "\n");
+						jta.append(" #"+jtfentrada.getText() + "\n");
 						jtfentrada.setText("");
 					}else {
 						jta.append("Error, JTextField esta vaio!!.\n");

@@ -1,32 +1,27 @@
 package chat_room;
 
-
-
-import java.awt.Color;
-import java.awt.Font;
+import java.awt.*;
 import java.awt.event.*;
-
+import java.net.URI;
 import javax.swing.*;
 import javax.swing.border.*;
-
 import utils.MaterialButton;
 
-public class ChatGUI extends JFrame {
+
+
+public class ChatGUI extends JFrame implements Runnable{
 
 	private JPanel contentPane;
-
+	private JButton git;
+	
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 
 					ChatGUI frame = new ChatGUI();
-					ChatGUIConsumidor  frameC = new ChatGUIConsumidor ();
-					frameC.setTitle("ChatGUIConsumidorV1.0");
 					frame.setTitle("ChatGUIV1.0");
-					frameC.setLocationRelativeTo(null);
 					frame.setLocationRelativeTo(null);
-					frameC.setVisible(true);
 					frame.setVisible(true);
 	}
 	
@@ -41,10 +36,11 @@ public class ChatGUI extends JFrame {
 		contentPane.setLayout(null);
 		
 		JTextArea jta = new JTextArea();
-		jta.setBounds(1, 1, 299, 380);
+		JScrollPane jsp = new JScrollPane(jta);
+		jsp.setBounds(1, 30, 283, 350);
 		jta.setEditable(false);
-		jta.setVisible(true);
-		contentPane.add(jta);
+		jsp.setVisible(true);
+		contentPane.add(jsp);
 		
 		JTextField jtfentrada = new JTextField();
 		//jtfentrada.setHorizontalAlignment(SwingConstants.SOUTH);
@@ -61,10 +57,10 @@ public class ChatGUI extends JFrame {
 		aceptar.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
 				if(jtfentrada.getText().isEmpty() == false) {
-					jta.append(jtfentrada.getText() + "\n");
+					jta.append(" *"+jtfentrada.getText() + "\n");
 					jtfentrada.setText("");
 				}else {
-					jta.append("Error, JTextField esta vaio!!.\n");
+					jta.append("	Error, JTextField esta vaio!!.\n");
 				}
 
 			}
@@ -75,10 +71,10 @@ public class ChatGUI extends JFrame {
 			public void keyPressed(KeyEvent a) {
 				if (a.getKeyCode() == KeyEvent.VK_ENTER) {
 					if(jtfentrada.getText().isEmpty() == false) {
-						jta.append(jtfentrada.getText() + "\n");
+						jta.append(" *"+jtfentrada.getText() + "\n");
 						jtfentrada.setText("");
 					}else {
-						jta.append("Error, JTextField esta vaio!!.\n");
+						jta.append("	Error, JTextField esta vaio!!.\n");
 					}
 		          }//end vk_Enter
 			}
@@ -87,7 +83,34 @@ public class ChatGUI extends JFrame {
 		});
 		contentPane.add(aceptar);
 		
+		git = new JButton("");
+		git.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent a) {
+				try {
+					Desktop.getDesktop().browse(new URI("https://github.com/boodahDEV/Java-concurrent"));
+					} catch (Exception e) {
+						//aviso.setVisible(true);
+						System.out.println("Error, sin conexion!");
+					} 
+			}
+		});
+		git.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		git.setRolloverSelectedIcon(new ImageIcon(ChatGUI.class.getResource("/chat_room/github2.png")));
+		git.setRolloverIcon(new ImageIcon(ChatGUI.class.getResource("/chat_room/github2.png")));
+		git.setIcon(new ImageIcon(ChatGUI.class.getResource("/chat_room/github.png")));
+		git.setIconTextGap(-11);
+		git.setFocusable(false);
+		git.setContentAreaFilled(false);
+		git.setBorderPainted(false);
+		git.setBounds(-5, -5, 35, 35);
+		git.setVisible(true);
+		contentPane.add(git);
 		
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
 		
 	}
 
