@@ -11,8 +11,10 @@ import utils.MaterialButton;
 
 public class ChatGUI extends JFrame implements Runnable{
 
-	private JPanel contentPane;
-	private JButton git;
+	protected JPanel contentPane;
+	protected JButton git,connections,activo;
+	protected JTextField jtfentrada;
+	protected JTextArea jta;
 	
 	/**
 	 * Launch the application.
@@ -31,21 +33,23 @@ public class ChatGUI extends JFrame implements Runnable{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 300, 450);
 		contentPane = new JPanel();
+		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JTextArea jta = new JTextArea();
+		jta = new JTextArea();
 		JScrollPane jsp = new JScrollPane(jta);
-		jsp.setBounds(1, 30, 283, 350);
+		jsp.setBounds(1, 30, 282, 336);
 		jta.setEditable(false);
 		jsp.setVisible(true);
 		contentPane.add(jsp);
 		
-		JTextField jtfentrada = new JTextField();
-		//jtfentrada.setHorizontalAlignment(SwingConstants.SOUTH);
-		jtfentrada.setFont(new Font("Century", Font.PLAIN, 15));
-		jtfentrada.setBounds(1, 385, 200, 25);
+		jtfentrada = new JTextField();
+		jtfentrada.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(128, 128, 128)));
+		jtfentrada.setFont(new Font("Century", Font.PLAIN, 17));
+		jtfentrada.grabFocus(); 
+		jtfentrada.setBounds(1, 370, 200, 38);
 		contentPane.add(jtfentrada);
 		
 		MaterialButton aceptar = new MaterialButton();
@@ -53,14 +57,15 @@ public class ChatGUI extends JFrame implements Runnable{
 		aceptar.setColorHover(new Color(142,36,170));
 		aceptar.setColorPressed(new Color(193,88,220));
 		aceptar.setText("Send");
-		aceptar.setBounds(203, 384, 80, 25);
+		aceptar.setBounds(205, 370, 75, 38);
 		aceptar.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
 				if(jtfentrada.getText().isEmpty() == false) {
-					jta.append(" *"+jtfentrada.getText() + "\n");
+					jtfentrada.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(128, 128, 128)));
+					jta.append(" ME: "+jtfentrada.getText() + "\n");
 					jtfentrada.setText("");
 				}else {
-					jta.append("	Error, JTextField esta vaio!!.\n");
+					jtfentrada.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(239,83,80)));
 				}
 
 			}
@@ -71,10 +76,11 @@ public class ChatGUI extends JFrame implements Runnable{
 			public void keyPressed(KeyEvent a) {
 				if (a.getKeyCode() == KeyEvent.VK_ENTER) {
 					if(jtfentrada.getText().isEmpty() == false) {
-						jta.append(" *"+jtfentrada.getText() + "\n");
+						jtfentrada.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(128, 128, 128)));
+						jta.append(" ME: "+jtfentrada.getText() + "\n");
 						jtfentrada.setText("");
 					}else {
-						jta.append("	Error, JTextField esta vaio!!.\n");
+						jtfentrada.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(239,83,80)));	
 					}
 		          }//end vk_Enter
 			}
@@ -106,6 +112,34 @@ public class ChatGUI extends JFrame implements Runnable{
 		git.setVisible(true);
 		contentPane.add(git);
 		
+		activo = new JButton("");
+				activo.setToolTipText("textprueba!");
+		activo.setRolloverSelectedIcon(new ImageIcon(ChatGUI.class.getResource("/chat_room/act_thread2.png")));
+		activo.setRolloverIcon(new ImageIcon(ChatGUI.class.getResource("/chat_room/act_thread2.png")));
+		activo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		activo.setIconTextGap(-10);
+		activo.setIcon(new ImageIcon(ChatGUI.class.getResource("/chat_room/act_thread.png")));
+		activo.setFocusable(false);
+		activo.setBorder(null);
+		activo.setContentAreaFilled(false);
+		activo.setBounds(254, 1, 25, 25);
+		activo.setVisible(false);
+		contentPane.add(activo);
+		
+		connections = new JButton("");
+				connections.setToolTipText("textPrueba!");
+		connections.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		connections.setRolloverSelectedIcon(new ImageIcon(ChatGUI.class.getResource("/chat_room/connection2.png")));
+		connections.setRolloverIcon(new ImageIcon(ChatGUI.class.getResource("/chat_room/connection2.png")));
+		connections.setIcon(new ImageIcon(ChatGUI.class.getResource("/chat_room/connection.png")));
+		connections.setIconTextGap(-10);
+		connections.setFocusable(false);
+		connections.setContentAreaFilled(false);
+		connections.setBorder(null);
+		connections.setBounds(220, 1, 25, 25);
+		connections.setVisible(false);
+		contentPane.add(connections);
+		
 	}
 
 	@Override
@@ -113,5 +147,4 @@ public class ChatGUI extends JFrame implements Runnable{
 		// TODO Auto-generated method stub
 		
 	}
-
 }
