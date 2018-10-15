@@ -15,21 +15,41 @@ public class ChatGUI extends JFrame implements Runnable{
 	protected JButton git,connections,activo;
 	protected JTextField jtfentrada;
 	protected JTextArea jta;
+	protected String temporal[];
+	protected int cont =0;
+	protected Buffer buffer;
 	
 	/**
 	 * Launch the application.
 	 */
+	
 	public static void main(String[] args) {
-
-					ChatGUI frame = new ChatGUI();
-					frame.setTitle("ChatGUIV1.0");
+					Buffer buffer = new Buffer();
+					buffer.setVisible(true);
+					ChatGUI frame = new ChatGUI(buffer);
+					Thread hilo = new Thread(frame);
+					hilo.setDaemon(true);
+						hilo.start();
 					frame.setLocationRelativeTo(null);
 					frame.setVisible(true);
-	}
+					
+					ChatGUIConsumidor  framec = new ChatGUIConsumidor (buffer);
+					Thread hilo2 = new Thread(framec);
+					hilo2.setDaemon(true);
+						hilo2.start();
+					framec.setLocationRelativeTo(null);
+					framec.setVisible(true);
+					
+	}//end main
 	
-	public ChatGUI() {
-		setResizable(false);
+	public ChatGUI(Buffer buffer) {
+		this.buffer = buffer;
+		temporal= new String[20];
 		
+		
+		
+		setTitle("ChatGUIV1.0");
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 300, 450);
 		contentPane = new JPanel();
@@ -39,6 +59,7 @@ public class ChatGUI extends JFrame implements Runnable{
 		contentPane.setLayout(null);
 		
 		jta = new JTextArea();
+		jta.setText("");
 		JScrollPane jsp = new JScrollPane(jta);
 		jsp.setBounds(1, 30, 282, 336);
 		jta.setEditable(false);
@@ -61,14 +82,16 @@ public class ChatGUI extends JFrame implements Runnable{
 		aceptar.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
 				if(jtfentrada.getText().isEmpty() == false) {
+					cont++;
 					jtfentrada.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(128, 128, 128)));
 					jta.append(" ME: "+jtfentrada.getText() + "\n");
+					obtenerTexto(jtfentrada.getText(),cont);
 					jtfentrada.setText("");
 				}else {
 					jtfentrada.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(239,83,80)));
 				}
 
-			}
+			}//end actionperformed
 			
 		});
 		
@@ -76,8 +99,10 @@ public class ChatGUI extends JFrame implements Runnable{
 			public void keyPressed(KeyEvent a) {
 				if (a.getKeyCode() == KeyEvent.VK_ENTER) {
 					if(jtfentrada.getText().isEmpty() == false) {
+						cont++;
 						jtfentrada.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(128, 128, 128)));
 						jta.append(" ME: "+jtfentrada.getText() + "\n");
+						obtenerTexto(jtfentrada.getText(),cont);
 						jtfentrada.setText("");
 					}else {
 						jtfentrada.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(239,83,80)));	
@@ -113,7 +138,7 @@ public class ChatGUI extends JFrame implements Runnable{
 		contentPane.add(git);
 		
 		activo = new JButton("");
-				activo.setToolTipText("textprueba!");
+				activo.setToolTipText("Thread start!");
 		activo.setRolloverSelectedIcon(new ImageIcon(ChatGUI.class.getResource("/chat_room/act_thread2.png")));
 		activo.setRolloverIcon(new ImageIcon(ChatGUI.class.getResource("/chat_room/act_thread2.png")));
 		activo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -127,7 +152,7 @@ public class ChatGUI extends JFrame implements Runnable{
 		contentPane.add(activo);
 		
 		connections = new JButton("");
-				connections.setToolTipText("textPrueba!");
+				connections.setToolTipText("Conectado");
 		connections.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		connections.setRolloverSelectedIcon(new ImageIcon(ChatGUI.class.getResource("/chat_room/connection2.png")));
 		connections.setRolloverIcon(new ImageIcon(ChatGUI.class.getResource("/chat_room/connection2.png")));
@@ -140,11 +165,53 @@ public class ChatGUI extends JFrame implements Runnable{
 		connections.setVisible(false);
 		contentPane.add(connections);
 		
-	}
+	}//end contructor
 
 	@Override
-	public void run() {
-		// TODO Auto-generated method stub
+	public void run() {	// este hilo debe ser daemon// este hilo debe ser daemon
+		System.out.println("HILO");
+		buffer.setvacio(true);
+		activo.setVisible(true);
 		
-	}
+				while(true) {
+					if(buffer.estaVacio() == true) {  // Tomar en cuenta el buffer  -> && buffer.j.getText().isEmpty() == true 		//esto es sobre la recepcion de mensajes 
+						try {
+							System.out.println("wait1");
+							wait();
+						}catch(Exception e) {}
+					}
+					break;
+				}// end while
+		
+				if(buffer.estaVacio() == true) {
+					for(int i=0;i<temporal.length;i++) {
+
+						if(buffer.estaVacio() == true) {
+							buffer.b.setText("USER: "+temporal[i]);
+							System.out.println("E");
+						
+							//temporal[i]="";
+							buffer.setvacio(false);
+						}
+					}//end for
+				}// end if		
+				
+					//System.out.println("Dentro else");
+				synchronized(buffer) {
+					if(buffer.estaVacio()==false) {
+						System.out.println("pegando1 ");
+						jta.append(""+buffer.b.getText()+"\n");
+						buffer.b.setText("");
+						buffer.setvacio(true);
+					}
+					buffer.setvacio(true);
+				}
+				
+		//end while
+	}//end run
+	
+	public synchronized void obtenerTexto(String texto, int cont) {
+		temporal[cont - 1]=texto;
+		System.out.println("Seteadox : "+temporal[cont - 1] +" 	->"+cont);
+	}//end obtenerTexto
 }
