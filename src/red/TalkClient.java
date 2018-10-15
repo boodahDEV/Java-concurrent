@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class TalkClient {
 	
-    private Socket server;
+    private Socket client;
     private DataInputStream bufferDeEntrada = null;
     private DataOutputStream bufferDeSalida = null;
     Scanner s = new Scanner(System.in);
@@ -17,20 +17,20 @@ public class TalkClient {
         try {
             bufferDeSalida.writeUTF(s);
             bufferDeSalida.flush();
-        } catch (IOException e) {
-        	System.out.println("IOException on enviar");
+        } catch (Exception e) {
+        	System.out.println("ERROR al enviar en cliente");
         }
-    }
+    }//end send
 
     public void startC(String ip, int puerto) {
         Thread hilo = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    server = new Socket(ip, puerto);
-                   	  System.out.println("\nConectado a :" + server.getInetAddress().getHostName());
-                    	bufferDeEntrada = new DataInputStream(server.getInputStream());
-                    	bufferDeSalida = new DataOutputStream(server.getOutputStream());
+                	client = new Socket(ip, puerto);
+                   	  System.out.print("Conectado a :" + client.getInetAddress().getHostName());
+                    	bufferDeEntrada = new DataInputStream(client.getInputStream());
+                    	bufferDeSalida = new DataOutputStream(client.getOutputStream());
                     	bufferDeSalida.flush();
                     datai(); // daat entrada!
                 } catch(Exception e) {
@@ -38,7 +38,7 @@ public class TalkClient {
                      try {
 						bufferDeEntrada.close();
 	                     bufferDeSalida.close();
-	                     server.close();
+	                     client.close();
                      }catch (Exception e1) {}
                 }finally {
                 System.exit(0);
@@ -46,7 +46,7 @@ public class TalkClient {
             }//end run
         });
         hilo.start();
-    }
+    }//end startC
 
     public void datai() {
         String texto;
@@ -62,27 +62,27 @@ public class TalkClient {
     public void printData() {
         String entrada;
         while (true) {
-            System.out.print("USER = ");
+            //System.out.print("USER = ");
             entrada = s.nextLine();
             if(entrada.length() > 0)
                 send(entrada);
         }
-    }
+    }//end printData
 
     public static void main(String[] argumentos) {
         TalkClient cliente = new TalkClient();
-        Scanner escaner = new Scanner(System.in);
+        Scanner ss = new Scanner(System.in);
         String ip = "localhost";
         
         	//System.out.println("Ingresa la IP: [localhost por defecto] ");
         	//String ip = escaner.nextLine();
         	//if (ip.length() <= 0) ip = "localhost";
 
-        System.out.println("Puerto [Debe ser mayor a 5000]: ");
-        String puerto = escaner.nextLine();
+        System.out.println("Set Port: ");
+        String puerto = ss.nextLine();
         if (puerto.length() < 0) puerto = "5050";
         
-        cliente.startC(ip, Integer.parseInt(puerto));
+        cliente.startC(ip, Integer.parseInt(puerto.trim()));
         cliente.printData();
-    }
-}
+    }//end main
+}//end class

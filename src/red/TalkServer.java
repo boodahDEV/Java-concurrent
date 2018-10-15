@@ -7,108 +7,100 @@ import java.util.Scanner;
 
 public class TalkServer {
 
-    private Socket socket;
-    private ServerSocket serverSocket;
+    private Socket server;
+    private ServerSocket ss;
     private DataInputStream bufferDeEntrada = null;
     private DataOutputStream bufferDeSalida = null;
-    Scanner escaner = new Scanner(System.in);
-    final String COMANDO_TERMINACION = "salir()";
+    
+    Scanner s = new Scanner(System.in);
+  
 
-    public void levantarConexion(int puerto) {
-        try {
-            serverSocket = new ServerSocket(puerto);
-            mostrarTexto("Esperando conexión entrante en el puerto " + String.valueOf(puerto) + "...");
-            socket = serverSocket.accept();
-            mostrarTexto("Conexión establecida con: " + socket.getInetAddress().getHostName() + "\n\n\n");
-        } catch (Exception e) {
-            mostrarTexto("Error en levantarConexion(): " + e.getMessage());
-            System.exit(0);
-        }
-    }
-    public void flujos() {
-        try {
-            bufferDeEntrada = new DataInputStream(socket.getInputStream());
-            bufferDeSalida = new DataOutputStream(socket.getOutputStream());
-            bufferDeSalida.flush();
-        } catch (IOException e) {
-            mostrarTexto("Error en la apertura de flujos");
-        }
-    }
 
-    public void recibirDatos() {
-        String st = "";
+
+
+    public void datai() {
+        String texto;
         try {
             do {
-                st = (String) bufferDeEntrada.readUTF();
-                mostrarTexto("\n[Cliente] => " + st);
-                System.out.print("\n[Usted] => ");
-            } while (!st.equals(COMANDO_TERMINACION));
-        } catch (IOException e) {
-            cerrarConexion();
-        }
-    }
+            	texto = (String) bufferDeEntrada.readUTF();
+                System.out.println("\nUSER = " + texto);
+                System.out.print("\nSERVER = ");
+            } while (!texto.equals("exit"));
+        } catch (Exception e) {
+        	 try {
+                 bufferDeEntrada.close();
+                 bufferDeSalida.close();
+                 server.close();
+             } catch (Exception a) {
+            	 System.out.println("Conversación finalizada....");
+                 System.exit(0);
+             }//end catch 2
+        }//end catch 1
+    }//end datai
 
 
-    public void enviar(String s) {
+    public void send(String text) {
         try {
-            bufferDeSalida.writeUTF(s);
+            bufferDeSalida.writeUTF(text);
             bufferDeSalida.flush();
-        } catch (IOException e) {
-            mostrarTexto("Error en enviar(): " + e.getMessage());
+        } catch (Exception e) {
+        	System.out.println("Error en el ENVIO!");
         }
-    }
+    }//end send
 
-    public static void mostrarTexto(String s) {
-        System.out.print(s);
-    }
 
-    public void escribirDatos() {
+    public void printData() {
+    	String entrada;
         while (true) {
-            System.out.print("[Usted] => ");
-            enviar(escaner.nextLine());   
-        }
-    }
+           // System.out.print("SERVER = ");
+            entrada = s.nextLine();
+            if(entrada.length() > 0)
+                send(entrada);
+        }//end while
+    }//end printData
 
-    public void cerrarConexion() {
-        try {
-            bufferDeEntrada.close();
-            bufferDeSalida.close();
-            socket.close();
-        } catch (IOException e) {
-          mostrarTexto("Excepción en cerrarConexion(): " + e.getMessage());
-        } finally {
-            mostrarTexto("Conversación finalizada....");
-            System.exit(0);
 
-        }
-    }
-
-    public void ejecutarConexion(int puerto) {
+    public void startC(int puerto) {
         Thread hilo = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
                     try {
-                        levantarConexion(puerto);
-                        flujos();
-                        recibirDatos();
+                    	ss = new ServerSocket(puerto);
+                    	System.out.println("Waiting for connection to: " + String.valueOf(puerto) + "...");
+                        server = ss.accept();
+                        System.out.println("Established connection: " + server.getInetAddress().getHostName() + "\n\n\n");
+                        	bufferDeEntrada = new DataInputStream(server.getInputStream());
+                        	bufferDeSalida = new DataOutputStream(server.getOutputStream());
+                        	bufferDeSalida.flush();
+                        datai();
+                    }catch(Exception a) {
+                    	System.out.println("Error en la conexion!");
                     } finally {
-                        cerrarConexion();
-                    }
-                }
-            }
+                    	 try {
+                             bufferDeEntrada.close();
+                             bufferDeSalida.close();
+                             server.close();
+                         } catch (Exception a) {
+                        	 System.out.println("Conversación finalizada....");
+                             System.exit(0);
+                         }//end catch 2
+                    }// end finally
+                }//end while
+            }//end run
         });
         hilo.start();
-    }
+    }//end startC
 
     public static void main(String[] args) throws IOException {
     	TalkServer s = new TalkServer();
         Scanner sc = new Scanner(System.in);
 
-        mostrarTexto("Ingresa el puerto [5050 por defecto]: ");
+        System.out.println("Set Port: ");
         String puerto = sc.nextLine();
-        if (puerto.length() <= 0) puerto = "5050";
-        s.ejecutarConexion(Integer.parseInt(puerto));
-        s.escribirDatos();
-    }
-}
+        if (puerto.length() < 0) puerto = "5050";
+        
+        s.startC(Integer.parseInt(puerto.trim()));
+        s.printData();
+    }//end main
+}//end class
