@@ -1,15 +1,17 @@
 package fabrica;
-
+import javax.swing.*;
 
 public class Supervisor extends Thread{
 	private Box caja;
 	private int id;
     private int i=0;
-
-    public Supervisor(Box caja, int id){
+    private JLabel buffer;
+    
+    public Supervisor(Box caja, int id,JLabel buffer){
  		this.caja = caja;
         this.id=id;
-    }
+        this.buffer=buffer;
+    }//END CONSTRUCTOR
 
     public void run(){
   	 while(true){
@@ -30,9 +32,11 @@ public class Supervisor extends Thread{
 		   if (caja.getCantCajaActual() != caja.getMaxCantCajas()){
 		  	  quitarCaja();
 			  System.out.println("Supervisor: " + id+" Quita la Cajeta:" + caja.getCantCajaActual());
+			  buffer.setVisible(false);
 		  	caja.notifyAll();
 			caja.setNoTengo(true);
 			}else{
+				buffer.setVisible(true);
 				  caja.notifyAll();
 				  break;
 				  }//end if

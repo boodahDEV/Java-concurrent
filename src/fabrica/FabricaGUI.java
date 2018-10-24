@@ -13,17 +13,18 @@ import javax.swing.border.MatteBorder;
 public class FabricaGUI extends JFrame {
 
 	private JPanel contentPane,personas;
-	private MaterialButton cantcaja,materialButton_1,setProduc,setSuper,star;
+	private MaterialButton cantcaja,setProduc,setSuper,star;
 	private JCheckBox setsuper;
 	private JTextField cantCajas,cantPro,jtfsuper;
 	private int s=1,p=1,c,cantPapel,CONT_PEOPLE;
-	private JLabel setpaper,paper,aviso2,jlcaja,aviso,jlpeoples[];
+	private JLabel setpaper,paper,aviso2,jlcaja,aviso,jlpeoples[],bufferBox,jltext,jlbuffer;
 	private JSlider deslisar;
 		protected People [] people;
 		protected Supervisor [] supervisor;
 		protected ThreadGroup group;
 		protected Thread []persona;
 	private JScrollPane jsp ;
+
 	public static void main(String[] args) {
 					FabricaGUI frame = new FabricaGUI();
 					frame.setLocationRelativeTo(null);
@@ -156,6 +157,14 @@ public class FabricaGUI extends JFrame {
 		contentPane.add(deslisar);
 		deslisar.setOrientation(SwingConstants.VERTICAL);
 		
+		bufferBox = new JLabel("");
+		bufferBox.setFont(new Font("Tahoma", Font.BOLD, 11));
+		bufferBox.setIconTextGap(-200);
+		bufferBox.setIcon(new ImageIcon(FabricaGUI.class.getResource("/fabrica/buffer.gif")));
+		bufferBox.setBounds(129, 145, 249, 159);
+		bufferBox.setVisible(false);
+		contentPane.add(bufferBox);
+		
 		jlcaja = new JLabel("");
 		jlcaja.setIcon(new ImageIcon(FabricaGUI.class.getResource("/fabrica/caja.png")));
 		jlcaja.setIconTextGap(-2);
@@ -245,14 +254,15 @@ public class FabricaGUI extends JFrame {
 				supervisor = new Supervisor[s];
 				persona = new Thread[people.length];
 				for(int i=0;i<people.length ;i++) {
-					people[i] = new People(caja, i+1);
+					people[i] = new People(caja, i+1,jlbuffer,bufferBox);
 					persona[i] = new Thread(people[i]);
 				}
 				for(int i=0;i<p;i++) {
 					persona[i].start();
 				}
+				bufferBox.setVisible(true);
 				
-				//ESTO ES ESTETICO PARA DETERMINAR LA LISTA DE PERSONAS//
+		//ESTO ES ESTETICO PARA DETERMINAR LA LISTA DE PERSONAS//
 				personas = new JPanel();
 				personas.setBackground(new Color(255, 255, 255));
 				jsp.setViewportView(personas);
@@ -267,15 +277,15 @@ public class FabricaGUI extends JFrame {
 						
 					jlpeoples[i].addMouseListener(new MouseAdapter() {		//------
 						public void mouseClicked(MouseEvent a) {			//---
-							//persona[CONT_PEOPLE]=null; 					//= ESTA SECCION DEBERIA QUE AL DARLE CLICK DEBERA
+							//persona[CONT_PEOPLE]=null; 					//= ESTA SECCION DEBERIA QUE AL DARLE CLICK PUDIERA DETENER AL HILO!
 							//System.out.println();							//=
 						}													//---
 					});														//------
 					personas.add(jlpeoples[i]);	
 				}
-				//ESTO ES ESTETICO PARA DETERMINAR LA LISTA DE PERSONAS//
+		//ESTO ES ESTETICO PARA DETERMINAR LA LISTA DE PERSONAS//
 				
-					supervisor[0] = new Supervisor(caja,1);		//--
+					supervisor[0] = new Supervisor(caja,1,jlbuffer);		//--
 					supervisor[0].setDaemon(true);				//----- ESTE SUPERVISOR ES DIRECTO, SOLO HAY UNO PERO EXISTE LA POSIBILIDAD DE HABER MAS PONIENDO 's'
 					supervisor[0].start();						//--
 				}else {
@@ -298,16 +308,18 @@ public class FabricaGUI extends JFrame {
 		jsp.setBounds(10, 172, 160, 100);
 		contentPane.add(jsp);
 		
-		JProgressBar progressBar = new JProgressBar();
-		progressBar.setBackground(Color.WHITE);
-		progressBar.setOrientation(SwingConstants.VERTICAL);
-		progressBar.setBounds(10, 298, 37, 101);
-		progressBar.setValue(50);
-		contentPane.add(progressBar);
+		jltext = new JLabel("Box Status");
+		jltext.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		jltext.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		jltext.setBounds(248, 158, 94, 23);
+		contentPane.add(jltext);
 		
-		
-		
-
+		jlbuffer = new JLabel();
+		jlbuffer.setVisible(false);
+		jlbuffer.setIcon(new ImageIcon(FabricaGUI.class.getResource("/fabrica/buffer.jpg")));
+		jlbuffer.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		jlbuffer.setBounds(220, 175, 120, 100);
+		contentPane.add(jlbuffer);
 		
 	}//end builder
-}
+}//END CLASS

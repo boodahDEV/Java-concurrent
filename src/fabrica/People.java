@@ -12,16 +12,18 @@ public class People extends JFrame implements Runnable {
 	private Box caja;
 	private int id,x,y;
 	private JTextArea jta;
-	private JLabel papel;
+	private JLabel papel,buffer,bufferBox;
 	private JPanel contentPane;
 	
-    public People(Box caja, int id){
+	
+    public People(Box caja, int id, JLabel buffer,JLabel bufferBox){
     	setUndecorated(true);
     	init();
     	this.setLocationRelativeTo(null);
     	this.setVisible(true);
  		this.caja = caja;
- 		this.id = id;
+ 		this.buffer=buffer;
+ 		this.bufferBox=bufferBox;
     }//contructor normal
     
     public void init() {
@@ -61,10 +63,11 @@ public class People extends JFrame implements Runnable {
  		jsp.setBorder(new MatteBorder(1,1,1,1, new Color(0,0,0)));
  		jsp.setBounds(5, 163, 190, 80);
  		contentPane.add(jsp);
-    } // metodo en sobrecarga
+    } //---END INIT
 
     public void run(){
   		int tiempo = 0;
+  		
   	   	while(true){
 			synchronized(caja){
   		     	while(!caja.isNoTengo()){
@@ -75,35 +78,33 @@ public class People extends JFrame implements Runnable {
   				}
        	  	}
 	     	//Produce the paper
-	 if (caja.getCantCajaActual() != caja.getMaxCantCajas())
-       {
-	  	try
-	  	  {
+	 if (caja.getCantCajaActual() != caja.getMaxCantCajas()){
+	  	try{
 		
 		tiempo = (int) (Math.random()* 100 + 1);
 		Thread.sleep(tiempo);
 	  	}catch(InterruptedException e){}
 
-  if(caja.getCantPapelActual() < caja.getCantMaxPapel() && caja.getCantCajaActual() != caja.getMaxCantCajas())
-	{
+  if(caja.getCantPapelActual() < caja.getCantMaxPapel() && caja.getCantCajaActual() != caja.getMaxCantCajas()){
 	  caja.setNoTengo(false);
+	  buffer.setVisible(false);bufferBox.setVisible(true); 		//---LABELES SETEADOS
 	  synchronized(caja)
 	   {
   			addPapel();
-  			jta.append("  My ID: "+ id + "  -->  "+ caja.getCantPapelActual()+"\n");
-		  	System.out.println("Id: "+ id + " Puso papel: "+ caja.getCantPapelActual());
+  			jta.append("  My ID: "+ id + "  -->  "+ caja.getCantPapelActual()+"\n"); 			//--- ESTE ES EL QUE PEGA EN TEXTAREA DE PEOPLE
+		  	System.out.println("Id: "+ id + " Puso papel: "+ caja.getCantPapelActual());		//--- ESTE ES EL CONTROL POR CONSOLA!
 			caja.notifyAll();
 		}
 	}
-} else	break;
+} else {buffer.setVisible(true);bufferBox.setVisible(false);	break;}
       
 } //fin del while
  return;
-}
+}//---END RUN
 
   public synchronized void addPapel()
     {
        caja.agregarPapel();
     }
   
-}
+}//END CLASS
