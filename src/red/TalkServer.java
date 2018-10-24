@@ -51,8 +51,9 @@ public class TalkServer {
 
     public void printData() {
     	String entrada;
+    	// System.out.print("SERVERx = ");
         while (true) {
-           // System.out.print("SERVER = ");
+           
             entrada = s.nextLine();
             if(entrada.length() > 0)
                 send(entrada);

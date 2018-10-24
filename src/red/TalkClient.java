@@ -61,8 +61,9 @@ public class TalkClient {
 
     public void printData() {
         String entrada;
+       // System.out.print("USERx = ");
         while (true) {
-            //System.out.print("USER = ");
+            
             entrada = s.nextLine();
             if(entrada.length() > 0)
                 send(entrada);
