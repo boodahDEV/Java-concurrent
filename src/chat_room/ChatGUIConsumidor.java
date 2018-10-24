@@ -173,7 +173,7 @@ public class ChatGUIConsumidor extends JFrame implements Runnable{
 					buffer.b.setText("USER: "+temporal[i]);
 					System.out.println("E2");
 				
-					//temporal[i]="";
+					temporal[i]=temporal[i+1];
 					buffer.setvacio(false);
 				}
 			}//end for
