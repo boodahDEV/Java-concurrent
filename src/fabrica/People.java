@@ -12,18 +12,18 @@ public class People extends JFrame implements Runnable {
 	private Box caja;
 	private int id,x,y;
 	private JTextArea jta;
-	private JLabel papel,buffer,bufferBox;
+	private JLabel papel;
+	private FabricaGUI buffer;
 	private JPanel contentPane;
 	
 	
-    public People(Box caja, int id, JLabel buffer,JLabel bufferBox){
+    public People(Box caja, int id, FabricaGUI buffer){
     	setUndecorated(true);
     	init();
     	this.setLocationRelativeTo(null);
     	this.setVisible(true);
  		this.caja = caja;
  		this.buffer=buffer;
- 		this.bufferBox=bufferBox;
     }//contructor normal
     
     public void init() {
@@ -87,7 +87,7 @@ public class People extends JFrame implements Runnable {
 
   if(caja.getCantPapelActual() < caja.getCantMaxPapel() && caja.getCantCajaActual() != caja.getMaxCantCajas()){
 	  caja.setNoTengo(false);
-	  buffer.setVisible(false);bufferBox.setVisible(true); 		//---LABELES SETEADOS
+	  buffer.jlbuffer.setVisible(false); buffer.bufferBox.setVisible(true); 		//---LABELES SETEADOS
 	  synchronized(caja)
 	   {
   			addPapel();
@@ -95,8 +95,14 @@ public class People extends JFrame implements Runnable {
 		  	System.out.println("Id: "+ id + " Puso papel: "+ caja.getCantPapelActual());		//--- ESTE ES EL CONTROL POR CONSOLA!
 			caja.notifyAll();
 		}
+	  		buffer.jtfbox.setText(""+caja.getCantCajaActual());
+	  		buffer.repaint();
 	}
-} else {buffer.setVisible(true);bufferBox.setVisible(false);	break;}
+} else { 
+	buffer.jlbuffer.setVisible(true);
+	buffer.bufferBox.setVisible(false);
+	break; 
+}//end else
       
 } //fin del while
  return;

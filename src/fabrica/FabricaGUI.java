@@ -12,25 +12,28 @@ import javax.swing.border.MatteBorder;
 
 public class FabricaGUI extends JFrame {
 
-	private JPanel contentPane,personas;
-	private MaterialButton cantcaja,setProduc,setSuper,star;
-	private JCheckBox setsuper;
-	private JTextField cantCajas,cantPro,jtfsuper;
-	private int s=1,p=1,c,cantPapel,CONT_PEOPLE;
-	private JLabel setpaper,paper,aviso2,jlcaja,aviso,jlpeoples[],bufferBox,jltext,jlbuffer;
-	private JSlider deslisar;
+	protected JPanel contentPane,personas;
+	protected MaterialButton cantcaja,setProduc,setSuper,star,stop;
+	protected JCheckBox setsuper;
+	protected JTextField cantCajas,cantPro,jtfsuper,jtfsupervisor,jtfbox;
+	protected int s=1,p=1,c,cantPapel,CONT_PEOPLE;
+	protected JLabel setpaper,paper,aviso2,jlcaja,aviso,jlpeoples[],bufferBox,jltext,jlbuffer,jlgestpeople,jlstaff,jlestatus,jltext1,jltext2;
+	protected JSlider deslisar;
 		protected People [] people;
 		protected Supervisor [] supervisor;
 		protected ThreadGroup group;
 		protected Thread []persona;
-	private JScrollPane jsp ;
+		protected FabricaGUI buffer;
+	protected JScrollPane jsp ;
+
 
 	public static void main(String[] args) {
 					FabricaGUI frame = new FabricaGUI();
+					frame.setfabrica(frame); 				//=== TEDIOSA FORMA DE TENER ACCESO GLOBAL DE ESTA REFERENCIA EN PEOPLE Y SUPERVISOR
 					frame.setLocationRelativeTo(null);
 					frame.setVisible(true);
 				
-	}
+	}//	=== main ===
 
 	
 	
@@ -137,7 +140,7 @@ public class FabricaGUI extends JFrame {
 		paper.setHorizontalAlignment(SwingConstants.CENTER);
 		paper.setHorizontalTextPosition(SwingConstants.CENTER);
 		paper.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		paper.setBounds(217, 91, 37, 35);
+		paper.setBounds(222, 91, 37, 35);
 		paper.setVisible(true);
 		contentPane.add(paper);
 		
@@ -153,7 +156,7 @@ public class FabricaGUI extends JFrame {
 		deslisar.setBackground(new Color(255, 255, 255));
 		deslisar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		deslisar.setFocusable(false);
-		deslisar.setBounds(260, 33, 28, 101);
+		deslisar.setBounds(265, 33, 28, 101);
 		contentPane.add(deslisar);
 		deslisar.setOrientation(SwingConstants.VERTICAL);
 		
@@ -163,19 +166,27 @@ public class FabricaGUI extends JFrame {
 		bufferBox.setIcon(new ImageIcon(FabricaGUI.class.getResource("/fabrica/buffer.gif")));
 		bufferBox.setBounds(129, 145, 249, 159);
 		bufferBox.setVisible(false);
+		
+		jtfbox = new JTextField();
+		jtfbox.setHorizontalAlignment(SwingConstants.CENTER);
+		jtfbox.setFont(new Font("Century", Font.PLAIN, 15));
+		jtfbox.setEnabled(false);
+		jtfbox.setColumns(10);
+		jtfbox.setBounds(325, 151, 35, 35);
+		contentPane.add(jtfbox);
 		contentPane.add(bufferBox);
 		
 		jlcaja = new JLabel("");
 		jlcaja.setIcon(new ImageIcon(FabricaGUI.class.getResource("/fabrica/caja.png")));
 		jlcaja.setIconTextGap(-2);
-		jlcaja.setBounds(210, 44, 50, 50);
+		jlcaja.setBounds(215, 44, 50, 50);
 		contentPane.add(jlcaja);
 		
 		jtfsuper = new JTextField();
 		jtfsuper.setColumns(10);
 		jtfsuper.setHorizontalAlignment(SwingConstants.CENTER);
 		jtfsuper.setFont(new Font("Century", Font.PLAIN, 15));
-		jtfsuper.setBounds(325, 75, 35, 35);
+		jtfsuper.setBounds(342, 80, 35, 35);
 		jtfsuper.setEnabled(false);
 		contentPane.add(jtfsuper);
 		
@@ -205,7 +216,7 @@ public class FabricaGUI extends JFrame {
 		setSuper.setColorHover(new Color(63,81,181));
 		setSuper.setColorPressed(new Color(117,125,232));
 		setSuper.setFocusable(false);
-		setSuper.setBounds(365, 75, 65, 35);
+		setSuper.setBounds(382, 80, 65, 35);
 		contentPane.add(setSuper);
 		
 		setsuper = new JCheckBox("Set supervisor");
@@ -224,12 +235,12 @@ public class FabricaGUI extends JFrame {
 		setsuper.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		setsuper.setBackground(new Color(255,255,255));
 		setsuper.setFocusable(false);
-		setsuper.setBounds(323, 48, 110, 23);
+		setsuper.setBounds(340, 53, 110, 23);
 		contentPane.add(setsuper);
 		
 		setpaper = new JLabel("Set amount of paper per box");
 		setpaper.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		setpaper.setBounds(175, 20, 139, 14);
+		setpaper.setBounds(180, 20, 139, 14);
 		contentPane.add(setpaper);
 		
 		aviso2 = new JLabel();
@@ -247,14 +258,14 @@ public class FabricaGUI extends JFrame {
 				contentPane.setBorder(null);
 				deslisar.setEnabled(false);
 				star.setEnabled(false);
-				
+
 				//*********************************//
 				Box  caja = new Box(c,cantPapel);
 				people = new People[p];
 				supervisor = new Supervisor[s];
 				persona = new Thread[people.length];
 				for(int i=0;i<people.length ;i++) {
-					people[i] = new People(caja, i+1,jlbuffer,bufferBox);
+					people[i] = new People(caja, i+1,buffer);
 					persona[i] = new Thread(people[i]);
 				}
 				for(int i=0;i<p;i++) {
@@ -285,7 +296,7 @@ public class FabricaGUI extends JFrame {
 				}
 		//ESTO ES ESTETICO PARA DETERMINAR LA LISTA DE PERSONAS//
 				
-					supervisor[0] = new Supervisor(caja,1,jlbuffer);		//--
+					supervisor[0] = new Supervisor(caja,1,buffer);		//--
 					supervisor[0].setDaemon(true);				//----- ESTE SUPERVISOR ES DIRECTO, SOLO HAY UNO PERO EXISTE LA POSIBILIDAD DE HABER MAS PONIENDO 's'
 					supervisor[0].start();						//--
 				}else {
@@ -299,7 +310,7 @@ public class FabricaGUI extends JFrame {
 		star.setColorPressed(new Color(117,125,232));
 		star.setFocusable(false);
 		star.setText("Start to Manufacture");
-		star.setBounds(300, 382, 150, 35);
+		star.setBounds(297, 382, 153, 35);
 		contentPane.add(star);
 		
 		jsp = new JScrollPane();
@@ -321,5 +332,75 @@ public class FabricaGUI extends JFrame {
 		jlbuffer.setBounds(220, 175, 120, 100);
 		contentPane.add(jlbuffer);
 		
+		JSeparator separator = new JSeparator();
+		separator.setBackground(Color.GRAY);
+		separator.setForeground(Color.GRAY);
+		separator.setBounds(10, 137, 437, 1);
+		contentPane.add(separator);
+		
+		
+		jlgestpeople = new JLabel("Display people in the factory.");
+		jlgestpeople.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		jlgestpeople.setBounds(10, 155, 160, 14);
+		contentPane.add(jlgestpeople);
+		
+		jlstaff = new JLabel("Staff configuration");
+		jlstaff.setBounds(10, 20, 160, 14);
+		contentPane.add(jlstaff);
+		jlstaff.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		
+		jlestatus = new JLabel("Supervisor status");
+		jlestatus.setFont(new Font("Tahoma", Font.BOLD, 12));
+		jlestatus.setBounds(10, 300, 160, 14);
+		contentPane.add(jlestatus);
+		
+		jtfsupervisor = new JTextField();
+		jtfsupervisor.setHorizontalAlignment(SwingConstants.CENTER);
+		jtfsupervisor.setFont(new Font("Century", Font.PLAIN, 15));
+		jtfsupervisor.setEnabled(false);
+		jtfsupervisor.setColumns(10);
+		jtfsupervisor.setBounds(10, 316, 35, 35);
+		contentPane.add(jtfsupervisor);
+		
+		jltext1 = new JLabel("Boxes that the supervisor ");
+		jltext1.setToolTipText("");
+		jltext1.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		jltext1.setBounds(10, 354, 139, 14);
+		contentPane.add(jltext1);
+		
+		jltext2 = new JLabel("to retired.");
+		jltext2.setToolTipText("");
+		jltext2.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		jltext2.setBounds(10, 368, 75, 14);
+		contentPane.add(jltext2);
+//== BOTON STOP TIENE FALLAS AL DETENER EL HILO, VERIFICAR		
+					stop = new MaterialButton();
+					stop.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent a) {
+							for(int i=0;i<people.length;i++) {
+								people[i] = null;
+							}//end for
+							
+						supervisor[0] = null;
+						cantCajas.setText("");
+						cantPro.setText("");
+						jtfsupervisor.setText("");
+						jtfbox.setText("");
+						}
+					});
+					stop.setColorNormal(new Color(0,41,132));
+					stop.setColorHover(new Color(63,81,181));
+					stop.setColorPressed(new Color(117,125,232));
+					stop.setFocusable(false);
+					stop.setText("Reset factory");
+					stop.setBounds(343, 342, 105, 35);
+					stop.setVisible(false);
+					contentPane.add(stop);
+//== BOTON STOP TIENE FALLAS AL DETENER EL HILO, VERIFICAR			
+	
 	}//end builder
+	
+	public void setfabrica(FabricaGUI buffer) {
+		this.buffer=buffer;
+	}
 }//END CLASS

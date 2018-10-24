@@ -5,9 +5,9 @@ public class Supervisor extends Thread{
 	private Box caja;
 	private int id;
     private int i=0;
-    private JLabel buffer;
+    protected FabricaGUI buffer;
     
-    public Supervisor(Box caja, int id,JLabel buffer){
+    public Supervisor(Box caja, int id,FabricaGUI buffer){
  		this.caja = caja;
         this.id=id;
         this.buffer=buffer;
@@ -32,7 +32,9 @@ public class Supervisor extends Thread{
 		   if (caja.getCantCajaActual() != caja.getMaxCantCajas()){
 		  	  quitarCaja();
 			  System.out.println("Supervisor: " + id+" Quita la Cajeta:" + caja.getCantCajaActual());
-			  buffer.setVisible(false);
+			  buffer.jtfsupervisor.setText(""+caja.getCantCajaActual());
+			  buffer.jlbuffer.setVisible(false);
+			  buffer.repaint();
 		  	caja.notifyAll();
 			caja.setNoTengo(true);
 			}else{
