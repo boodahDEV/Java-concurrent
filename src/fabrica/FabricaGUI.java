@@ -12,16 +12,18 @@ import javax.swing.border.MatteBorder;
 
 public class FabricaGUI extends JFrame {
 
-	private JPanel contentPane;
+	private JPanel contentPane,personas;
 	private MaterialButton cantcaja,materialButton_1,setProduc,setSuper,star;
 	private JCheckBox setsuper;
 	private JTextField cantCajas,cantPro,jtfsuper;
-	private int s=1,p=1,c,cantPapel;
-	private JLabel setpaper,paper,aviso2,jlcaja,aviso;
+	private int s=1,p=1,c,cantPapel,CONT_PEOPLE;
+	private JLabel setpaper,paper,aviso2,jlcaja,aviso,jlpeoples[];
 	private JSlider deslisar;
 		protected People [] people;
 		protected Supervisor [] supervisor;
 		protected ThreadGroup group;
+		protected Thread []persona;
+	private JScrollPane jsp ;
 	public static void main(String[] args) {
 					FabricaGUI frame = new FabricaGUI();
 					frame.setLocationRelativeTo(null);
@@ -241,7 +243,7 @@ public class FabricaGUI extends JFrame {
 				Box  caja = new Box(c,cantPapel);
 				people = new People[p];
 				supervisor = new Supervisor[s];
-				Thread []persona = new Thread[people.length];
+				persona = new Thread[people.length];
 				for(int i=0;i<people.length ;i++) {
 					people[i] = new People(caja, i+1);
 					persona[i] = new Thread(people[i]);
@@ -250,9 +252,32 @@ public class FabricaGUI extends JFrame {
 					persona[i].start();
 				}
 				
-				supervisor[0] = new Supervisor(caja,1);
-				supervisor[0].setDaemon(true);
-				supervisor[0].start();
+				//ESTO ES ESTETICO PARA DETERMINAR LA LISTA DE PERSONAS//
+				personas = new JPanel();
+				personas.setBackground(new Color(255, 255, 255));
+				jsp.setViewportView(personas);
+				personas.setLayout(new GridLayout(people.length,1, 10, 10));
+				
+				jlpeoples = new JLabel[people.length];
+				for(int i=0;i<jlpeoples.length;i++) {
+					jlpeoples[i] = new JLabel("PEOPLE: "+(i+1));
+					jlpeoples[i].setBackground(new Color(255, 255, 255));
+					jlpeoples[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+						CONT_PEOPLE=i;//Guardo el indice del label de la 
+						
+					jlpeoples[i].addMouseListener(new MouseAdapter() {		//------
+						public void mouseClicked(MouseEvent a) {			//---
+							//persona[CONT_PEOPLE]=null; 					//= ESTA SECCION DEBERIA QUE AL DARLE CLICK DEBERA
+							//System.out.println();							//=
+						}													//---
+					});														//------
+					personas.add(jlpeoples[i]);	
+				}
+				//ESTO ES ESTETICO PARA DETERMINAR LA LISTA DE PERSONAS//
+				
+					supervisor[0] = new Supervisor(caja,1);		//--
+					supervisor[0].setDaemon(true);				//----- ESTE SUPERVISOR ES DIRECTO, SOLO HAY UNO PERO EXISTE LA POSIBILIDAD DE HABER MAS PONIENDO 's'
+					supervisor[0].start();						//--
 				}else {
 					contentPane.setBorder(new MatteBorder(2,2,2,2, new Color(220, 20, 60)));
 					setTitle("Error, campos vacios!");
@@ -267,8 +292,22 @@ public class FabricaGUI extends JFrame {
 		star.setBounds(300, 382, 150, 35);
 		contentPane.add(star);
 		
+		jsp = new JScrollPane();
+		jsp.setBackground(new Color(255, 255, 255));
+		jsp.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(65, 105, 225)));
+		jsp.setBounds(10, 172, 160, 100);
+		contentPane.add(jsp);
 		
+		JProgressBar progressBar = new JProgressBar();
+		progressBar.setBackground(Color.WHITE);
+		progressBar.setOrientation(SwingConstants.VERTICAL);
+		progressBar.setBounds(10, 298, 37, 101);
+		progressBar.setValue(50);
+		contentPane.add(progressBar);
+		
+		
+		
+
 		
 	}//end builder
-
 }

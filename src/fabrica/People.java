@@ -4,40 +4,63 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 import java.awt.*;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseAdapter;
 
 public class People extends JFrame implements Runnable {
 	private Box caja;
-	private int id;
+	private int id,x,y;
 	private JTextArea jta;
 	private JLabel papel;
 	private JPanel contentPane;
 	
     public People(Box caja, int id){
+    	setUndecorated(true);
+    	init();
+    	this.setLocationRelativeTo(null);
+    	this.setVisible(true);
  		this.caja = caja;
  		this.id = id;
     }//contructor normal
     
-    public People() {
+    public void init() {
+
   	    setResizable(false);
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(200, 250);
 		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setFont(new Font("Century Gothic", Font.PLAIN, 14));
+		contentPane.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(65, 105, 225)));
 		contentPane.setBackground(new Color(255,255,255));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
  		
  		papel = new JLabel("");
+ 		papel.addMouseListener(new MouseAdapter() {
+ 			public void mousePressed(MouseEvent a) {
+ 				x = a.getX();
+ 				y = a.getY();
+ 			}
+ 		});
+ 		papel.addMouseMotionListener(new MouseMotionAdapter() {
+ 			public void mouseDragged(MouseEvent a) {
+ 				int xx = a.getXOnScreen();
+ 				int yy = a.getYOnScreen();
+ 				setLocation(xx-x,yy-y);
+ 			}
+ 		});
  		papel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
  		papel.setBounds(15, 1, 181, 147);
  		papel.setIconTextGap(-4);
- 		papel.setIcon(new ImageIcon(People.class.getResource("/fabrica/papel.gif")));
+ 		papel.setIcon(new ImageIcon(People.class.getResource("/fabrica/papelN.gif")));
  		contentPane.add(papel);
  		
  		jta = new JTextArea();
- 		jta.setBorder(new MatteBorder(1,1,1,1, new Color(0,0,0)));
- 		jta.setBounds(1, 150, 181, 60);
- 		contentPane.add(jta);
+ 		JScrollPane jsp = new JScrollPane(jta);
+ 		jsp.setBorder(new MatteBorder(1,1,1,1, new Color(0,0,0)));
+ 		jsp.setBounds(5, 163, 190, 80);
+ 		contentPane.add(jsp);
     } // metodo en sobrecarga
 
     public void run(){
@@ -67,7 +90,7 @@ public class People extends JFrame implements Runnable {
 	  synchronized(caja)
 	   {
   			addPapel();
-  			jta.append("Id: "+ id + " --> "+ caja.getCantPapelActual());
+  			jta.append("  My ID: "+ id + "  -->  "+ caja.getCantPapelActual()+"\n");
 		  	System.out.println("Id: "+ id + " Puso papel: "+ caja.getCantPapelActual());
 			caja.notifyAll();
 		}
@@ -83,9 +106,4 @@ public class People extends JFrame implements Runnable {
        caja.agregarPapel();
     }
   
-  public static void main(String args[]) {
-	  People p = new People();
-	  p.setLocationRelativeTo(null);
-	  p.setVisible(true);
-  }
 }
