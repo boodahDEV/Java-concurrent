@@ -87,16 +87,17 @@ public class People extends JFrame implements Runnable {
 
   if(caja.getCantPapelActual() < caja.getCantMaxPapel() && caja.getCantCajaActual() != caja.getMaxCantCajas()){
 	  caja.setNoTengo(false);
-	  buffer.jlbuffer.setVisible(false); buffer.bufferBox.setVisible(true); 		//---LABELES SETEADOS
+	  buffer.jlbuffer.setVisible(false); buffer.bufferBox.setVisible(true); 					//---LABELES SETEADOS
 	  synchronized(caja)
 	   {
-  			addPapel();
+  			addPapel();																			//--- ANADE PAPEL
   			jta.append("  My ID: "+ id + "  -->  "+ caja.getCantPapelActual()+"\n"); 			//--- ESTE ES EL QUE PEGA EN TEXTAREA DE PEOPLE
 		  	System.out.println("Id: "+ id + " Puso papel: "+ caja.getCantPapelActual());		//--- ESTE ES EL CONTROL POR CONSOLA!
 			caja.notifyAll();
-		}
-	  		buffer.jtfbox.setText(""+caja.getCantCajaActual());
+			buffer.jtfbox.setText(""+caja.getCantCajaActual());
 	  		buffer.repaint();
+		}
+	  		
 	}
 } else { 
 	buffer.jlbuffer.setVisible(true);
