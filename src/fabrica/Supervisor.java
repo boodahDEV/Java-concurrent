@@ -34,7 +34,6 @@ public class Supervisor extends Thread{
 			  System.out.println("Supervisor: " + id+" Quita la Cajeta:" + caja.getCantCajaActual());
 			  buffer.jtfsupervisor.setText(""+caja.getCantCajaActual()); // === SE MANDA EL NUMERO DE CAJAS QUE QUITO EL SUPERVISOR AL BUFFER!
 			  		buffer.jtfbox.getText();							 // === 
-			  		buffer.jtfbox.setText(""+(Integer.parseInt(buffer.jtfbox.getText())-1));  //--- PRUEBA!
 			  buffer.jlbuffer.setVisible(false);						 
 			  buffer.repaint();
 		  	caja.notifyAll();

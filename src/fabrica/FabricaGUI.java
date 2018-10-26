@@ -172,7 +172,7 @@ public class FabricaGUI extends JFrame {
 		jtfbox.setFont(new Font("Century", Font.PLAIN, 15));
 		jtfbox.setEnabled(false);
 		jtfbox.setColumns(10);
-		jtfbox.setBounds(325, 151, 35, 35);
+		jtfbox.setBounds(342, 168, 35, 35);
 		contentPane.add(jtfbox);
 		contentPane.add(bufferBox);
 		
@@ -319,10 +319,10 @@ public class FabricaGUI extends JFrame {
 		jsp.setBounds(10, 172, 160, 100);
 		contentPane.add(jsp);
 		
-		jltext = new JLabel("Box Status");
+		jltext = new JLabel("Total Boxes produced");
 		jltext.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		jltext.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		jltext.setBounds(248, 158, 94, 23);
+		jltext.setBounds(215, 155, 131, 23);
 		contentPane.add(jltext);
 		
 		jlbuffer = new JLabel();
@@ -373,6 +373,7 @@ public class FabricaGUI extends JFrame {
 		jltext2.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		jltext2.setBounds(10, 368, 75, 14);
 		contentPane.add(jltext2);
+		
 //== BOTON STOP TIENE FALLAS AL DETENER EL HILO, VERIFICAR		
 					stop = new MaterialButton();
 					stop.addActionListener(new ActionListener() {
@@ -394,7 +395,7 @@ public class FabricaGUI extends JFrame {
 					stop.setFocusable(false);
 					stop.setText("Reset factory");
 					stop.setBounds(343, 342, 105, 35);
-					stop.setVisible(false);
+					stop.setVisible(false);  								//---- SET VISIBLE FALSE ! 
 					contentPane.add(stop);
 //== BOTON STOP TIENE FALLAS AL DETENER EL HILO, VERIFICAR			
 	

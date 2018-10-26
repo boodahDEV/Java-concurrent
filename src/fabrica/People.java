@@ -10,7 +10,7 @@ import java.awt.event.MouseAdapter;
 
 public class People extends JFrame implements Runnable {
 	private Box caja;
-	private int id,x,y;
+	private int id = 0,x,y;
 	private JTextArea jta;
 	private JLabel papel;
 	private FabricaGUI buffer;
@@ -23,6 +23,7 @@ public class People extends JFrame implements Runnable {
     	this.setLocationRelativeTo(null);
     	this.setVisible(true);
  		this.caja = caja;
+ 		this.id=id; //--
  		this.buffer=buffer;
     }//contructor normal
     
@@ -94,12 +95,13 @@ public class People extends JFrame implements Runnable {
   			jta.append("  My ID: "+ id + "  -->  "+ caja.getCantPapelActual()+"\n"); 			//--- ESTE ES EL QUE PEGA EN TEXTAREA DE PEOPLE
 		  	System.out.println("Id: "+ id + " Puso papel: "+ caja.getCantPapelActual());		//--- ESTE ES EL CONTROL POR CONSOLA!
 			caja.notifyAll();
-			buffer.jtfbox.setText(""+caja.getCantCajaActual());
-	  		buffer.repaint();
+			
 		}
 	  		
 	}
 } else { 
+	buffer.jtfbox.setText(""+caja.getCantCajaActual());
+		buffer.repaint();
 	buffer.jlbuffer.setVisible(true);
 	buffer.bufferBox.setVisible(false);
 	break; 
