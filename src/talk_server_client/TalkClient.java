@@ -1,4 +1,4 @@
-package red;
+package talk_server_client;
 
 
 import java.net.*;
