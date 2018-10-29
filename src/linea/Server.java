@@ -11,8 +11,10 @@ public class Server extends Thread{
     private ObjectOutputStream out;
     	private Punto p1, p2;														//---=== CREO UN ARREGLO DE PUNTOS CON UN MAXIMO DE 10 PUNTOS POR ENTRADA
     	private Linea linea;
+    	private Double distancia;
 	  public static void main(String[] args){
-		  
+		  Thread s = new Server();
+		  		s.start();
 		  	
 	  }	//---=== MAIN 
 
@@ -37,12 +39,15 @@ public class Server extends Thread{
 				      System.out.println("El servidor recibio el punto #2");
 		      
 			// AQUI ES DONDE DEBO EMPEZAR A MANIPULAR LOS PUNTOS
-		      
-				      System.out.println("El servidor envia al Cliente la linea");   
-				      out.writeObject(this); //---=== ENVIA LA LINEA AL IGUAL QUE LA DISTANCIA
+				if(p1 instanceof Punto && p2 instanceof Punto)						//---=== VERIFICO SI EL OBJETO OBTENIDO ES UNA INSTANCIA DE PUNTO
+					linea = new Linea(p1,p2);
+				      System.out.println("El servidor envia al Cliente la linea");
+				      out.writeObject(linea); 										//---=== ENVIA LA LINEA AL CLIENTE
+				    distancia = (p1.distancia(p2));									//---=== ENCAPSULA EL VALOR DE LA DISTANCIA DEL PUNTO1 AL PUNTO2 DENTRO DE LA ROPERCLASS
+				      System.out.println("El servidor envia al Cliente la distancia del Punto#1 al Punto#2");
+				      out.writeObject(distancia);									//---=== ENVIA LA DISTANCIA AL CLIENTE
 				      
-				      
-				  }catch(IOException ex) {
+				  }catch(Exception ex) {
 				        System.out.println("ERROR! en los object");
 				     }
 			        
