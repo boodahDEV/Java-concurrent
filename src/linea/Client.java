@@ -2,7 +2,7 @@ package linea;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.Date;
+import java.util.*;
 
 import javax.swing.JOptionPane;
 
@@ -15,63 +15,71 @@ public class Client extends Thread{
     	private Linea linea;
     	private Double dist;
     	private double distancia;
-	  public static void main(String[] args){
-		  Thread s = new Client();
-		  		s.start();
+    	private String texto="Error en la transferencia de la linea.";
+    	private Scanner s = new Scanner(System.in);
+	 
+    public static void main(String[] args){
+		  Thread c = new Client();
+		  		c.start();
 		  	
 	  }	//---=== MAIN 
 
 	  public void run() {
-		  int n1,n2;
+		  double n1,n2;																//---=== VARIABLES DE LOS PARAMETROS DE ENTRADA
 	    try {
 
 	      socket = new Socket ("localhost",7219);									//---=== ESTABLECE EL PUERTO DEL SERVIDOR!
 	      System.out.println(new Date() + ": Start a new client \n"); 				//---=== Debo imprimir el inicio del servidor 
 
-	      while (true) {
+	     // while (true) {
+		    /* //n1=Integer.parseInt(JOptionPane.showInputDialog("Ingrese el punto #1 x:"));
+		     	System.out.println("Ingrese el punto #1 x:");
+		     		n1 = s.nextDouble();
+		     	System.out.println("Ingrese el punto #1 y:");
+		     		n2 = s.nextDouble();
+		     //n2=Integer.parseInt(JOptionPane.showInputDialog("Ingrese el punto #2 y:"));
+		     
+		      p1 = new Punto(n1,n2);										//---=== SE DEFINE EL OBJETO PUNTO#1!
+		      n1=0;n2=0;
+		      
+		     //n1=Integer.parseInt(JOptionPane.showInputDialog("Ingrese el punto #2 x:"));
+		     	System.out.println("Ingrese el punto #2 x:");
+		     		n1 = s.nextDouble();
+		     	System.out.println("Ingrese el punto #2 y:");
+		     		n2 = s.nextDouble();
+		     //n2=Integer.parseInt(JOptionPane.showInputDialog("Ingrese el punto #2 y:"));
+		      
+		      p2 = new Punto(n1,n2);											//---=== SE DEFINE EL OBJETO PUNTO#2!
+			*/
+			
+	    	  p1 = new Punto(1.0,2.5);p2 = new Punto(3.0,6.0);
 	    	  
-				try{
-				     in = new ObjectInputStream(socket.getInputStream());
 				     out = new ObjectOutputStream(socket.getOutputStream());
+				     //in = new ObjectInputStream(socket.getInputStream());
 				     
-				     n1=Integer.parseInt(JOptionPane.showInputDialog("Ingrese el punto #1 x:"));
-				     n2=Integer.parseInt(JOptionPane.showInputDialog("Ingrese el punto #1 y:"));
-				     
-				      p1 = new Punto(n1,n2);										//---=== SE DEFINE EL OBJETO PUNTO#1!
-				      n1=0;n2=0;
-				      
-				     n1=Integer.parseInt(JOptionPane.showInputDialog("Ingrese el punto #2 x:"));
-				     n2=Integer.parseInt(JOptionPane.showInputDialog("Ingrese el punto #2 y:"));
-				      
-				     p2 = new Punto(n1,n2);											//---=== SE DEFINE EL OBJETO PUNTO#2!
-				      
+				     p1 = new Punto(1.0,2.5);
 				      out.writeObject(p1);
 				      System.out.println("El cliente envia el punto #1");
-				      out.writeObject(p2);
-				      System.out.println("El cliente envia el punto #2");
-				      
-				      linea =(Linea)in.readObject();								//---=== RECIBO EL OBJETO LINEA
-				      distancia = dist.doubleValue();
-				      
-				if(linea instanceof Linea) {
-					  linea
-				}
-				      
-		      
-			// AQUI ES DONDE DEBO EMPEZAR A MANIPULAR LOS PUNTOS
-		      
-				      System.out.println("El servidor envia al Cliente la linea");   
-				      out.writeObject(this); //---=== ENVIA LA LINEA AL IGUAL QUE LA DISTANCIA
+				      out.flush();
+//				      out.writeObject(p2);
+//				      System.out.println("El cliente envia el punto #2");
 				      
 				      
-				  }catch(IOException ex) {
-				        System.out.println("ERROR! en los object");
-				     }
-			        
+//				      linea =(Linea)in.readObject();								//---=== RECIBO EL OBJETO LINEA
+//				      dist = (Double) in.readObject();
+//				      distancia = dist.doubleValue();
+//				      
+//				if(linea instanceof Linea) {
+//					 texto = linea.imprime_linea();
+//				}
+//				      System.out.println("\nLa linea es: "+texto);
+//				      System.out.println("\nLa distancia del punto#1 al punto#2 es:  "+distancia);
+//		
+
 	        
-	      }//---=== END WHILE
+	     // }//---=== END WHILE
 	    }catch (Exception ex) {
-	      System.out.println("ERROR!...");
+	      System.out.println("ERROR! CLIENT...");
 	    }
 	    
 	    
