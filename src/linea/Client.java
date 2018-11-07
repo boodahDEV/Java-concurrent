@@ -54,7 +54,7 @@ public class Client extends Thread{
 				      distancia = dist.doubleValue();
 				      
 				if(linea instanceof Linea) {
-					  linea
+					 
 				}
 				      
 		      

@@ -253,8 +253,8 @@ public class FabricaGUI extends JFrame {
 		star = new MaterialButton();
 		star.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
-			if (cantPro.isEnabled() == false && cantCajas.isEnabled() == false && jtfsuper.isEnabled() == false) {
-				setTitle("FabricaV1.0");
+			if (cantPro.isEnabled() == false && cantCajas.isEnabled() == false && jtfsuper.isEnabled() == false && persona == null && supervisor==null) {
+				setTitle("FabricaV1.5");
 				contentPane.setBorder(null);
 				deslisar.setEnabled(false);
 				star.setEnabled(false);
@@ -378,11 +378,8 @@ public class FabricaGUI extends JFrame {
 					stop = new MaterialButton();
 					stop.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent a) {
-							for(int i=0;i<people.length;i++) {
-								people[i] = null;
-							}//end for
+							stop();
 							
-						supervisor[0] = null;
 						cantCajas.setText("");
 						cantPro.setText("");
 						jtfsupervisor.setText("");
@@ -395,7 +392,7 @@ public class FabricaGUI extends JFrame {
 					stop.setFocusable(false);
 					stop.setText("Reset factory");
 					stop.setBounds(343, 342, 105, 35);
-					stop.setVisible(false);  								//---- SET VISIBLE FALSE ! 
+					stop.setVisible(true);  								//---- SET VISIBLE FALSE ! 
 					contentPane.add(stop);
 //== BOTON STOP TIENE FALLAS AL DETENER EL HILO, VERIFICAR			
 	
@@ -404,4 +401,19 @@ public class FabricaGUI extends JFrame {
 	public void setfabrica(FabricaGUI buffer) {
 		this.buffer=buffer;
 	}
+	
+	public void stop() {
+		if(persona != null && supervisor != null) {
+			System.out.println("\n\n HILOS DETENIDOS!!! \n");
+			persona=null; supervisor=null;
+			System.gc();
+			try {
+				System.gc();
+				Thread.sleep(2000);
+			}catch(Exception e) {}
+		}else {
+			System.out.println("\n\n no se detubo el hilo! \n");
+		}
+	}
+	
 }//END CLASS
