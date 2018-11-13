@@ -26,26 +26,27 @@ public class ChatGUI extends JFrame implements Runnable{
 	public static void main(String[] args) {
 					Buffer buffer = new Buffer();
 					buffer.setVisible(true);
+					
 					ChatGUI frame = new ChatGUI(buffer);
+					frame.setLocationRelativeTo(null);
+					frame.setVisible(true);
 					Thread hilo = new Thread(frame);
 					hilo.setDaemon(true);
 						hilo.start();
-					frame.setLocationRelativeTo(null);
-					frame.setVisible(true);
+
 					
-					ChatGUIConsumidor  framec = new ChatGUIConsumidor (buffer);
-					Thread hilo2 = new Thread(framec);
-					hilo2.setDaemon(true);
-						hilo2.start();
-					framec.setLocationRelativeTo(null);
-					framec.setVisible(true);
+//					ChatGUIConsumidor  framec = new ChatGUIConsumidor (buffer);
+//					framec.setLocationRelativeTo(null);
+//					framec.setVisible(true);
+//					Thread hilo2 = new Thread(framec);
+//					hilo2.setDaemon(true);
+//						hilo2.start();
 					
 	}//end main
 	
 	public ChatGUI(Buffer buffer) {
 		this.buffer = buffer;
 		temporal= new String[20];
-		
 		
 		
 		setTitle("ChatGUIV1.0");
@@ -61,7 +62,7 @@ public class ChatGUI extends JFrame implements Runnable{
 		jta = new JTextArea();
 		jta.setText("");
 		JScrollPane jsp = new JScrollPane(jta);
-		jsp.setBounds(1, 30, 282, 336);
+		jsp.setBounds(10, 30, 282, 336);
 		jta.setEditable(false);
 		jsp.setVisible(true);
 		contentPane.add(jsp);
@@ -70,7 +71,7 @@ public class ChatGUI extends JFrame implements Runnable{
 		jtfentrada.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(128, 128, 128)));
 		jtfentrada.setFont(new Font("Century", Font.PLAIN, 17));
 		jtfentrada.grabFocus(); 
-		jtfentrada.setBounds(1, 370, 200, 38);
+		jtfentrada.setBounds(10, 370, 200, 38);
 		contentPane.add(jtfentrada);
 		
 		MaterialButton aceptar = new MaterialButton();
@@ -78,21 +79,20 @@ public class ChatGUI extends JFrame implements Runnable{
 		aceptar.setColorHover(new Color(142,36,170));
 		aceptar.setColorPressed(new Color(193,88,220));
 		aceptar.setText("Send");
-		aceptar.setBounds(205, 370, 75, 38);
+		aceptar.setBounds(215, 370, 75, 38);
 		aceptar.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent a) {
 				if(jtfentrada.getText().isEmpty() == false) {
 					cont++;
 					jtfentrada.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(128, 128, 128)));
 					jta.append(" ME: "+jtfentrada.getText() + "\n");
-					obtenerTexto(jtfentrada.getText(),cont);
+					//obtenerTexto(jtfentrada.getText(),cont);  		//---=== SUPUESTAMENTE AQUI OBTENGO EL TEXTO DEL MANDANDOLO A UN ARREGLO!
 					jtfentrada.setText("");
 				}else {
 					jtfentrada.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(239,83,80)));
 				}
 
 			}//end actionperformed
-			
 		});
 		
 		jtfentrada.addKeyListener(new KeyListener() {
@@ -102,7 +102,7 @@ public class ChatGUI extends JFrame implements Runnable{
 						cont++;
 						jtfentrada.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(128, 128, 128)));
 						jta.append(" ME: "+jtfentrada.getText() + "\n");
-						obtenerTexto(jtfentrada.getText(),cont);
+						//obtenerTexto(jtfentrada.getText(),cont);		//---=== SUPUESTAMENTE AQUI OBTENGO EL TEXTO DEL MANDANDOLO A UN ARREGLO!
 						jtfentrada.setText("");
 					}else {
 						jtfentrada.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(239,83,80)));	
@@ -172,7 +172,7 @@ public class ChatGUI extends JFrame implements Runnable{
 		System.out.println("HILO");
 		buffer.setvacio(true);
 		activo.setVisible(true);
-		
+		String text[]= jta.getText().split("\n");
 				while(true) {
 					if(buffer.estaVacio() == true) {  // Tomar en cuenta el buffer  -> && buffer.j.getText().isEmpty() == true 		//esto es sobre la recepcion de mensajes 
 						try {
@@ -182,19 +182,12 @@ public class ChatGUI extends JFrame implements Runnable{
 					}
 					break;
 				}// end while
-		
-				if(buffer.estaVacio() == true) {
-					for(int i=0;i<temporal.length;i++) {
-
-						if(buffer.estaVacio() == true) {
-							buffer.b.setText("USER: "+temporal[i]);
-							System.out.println("E");
-						
-							//temporal[i]="";
-							buffer.setvacio(false);
-						}
-					}//end for
-				}// end if		
+				synchronized(buffer) {
+					for(;;) {
+						break;
+					}
+					
+				}
 				
 					//System.out.println("Dentro else");
 				synchronized(buffer) {

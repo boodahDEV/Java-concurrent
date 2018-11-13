@@ -19,10 +19,7 @@ public class Buffer extends JFrame{
 		b.setBounds(10, 11, 287, 38);
 		getContentPane().add(b);
 		
-//		j = new JTextField("");
-//		j.setBounds(10, 100, 287, 38);
-//		getContentPane().add(j);
-		
+
 	}
 	
 	public synchronized boolean bestaVacio() {
@@ -40,14 +37,5 @@ public class Buffer extends JFrame{
 	public boolean estaVacio() {
 		return bandera;
 	}
-/*	
- *
-	public synchronized boolean jestaVacio() {
-		if(j.getText().isEmpty() == true) {
-		return true;
-		}else {
-			return false;
-		}
-	}
-*/
+
 }
